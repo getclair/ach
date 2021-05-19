@@ -11,7 +11,7 @@ class Batch extends AbstractDictionary
             'width' => 1,
             'position' => 1,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '8',
         ],
 
@@ -20,7 +20,7 @@ class Batch extends AbstractDictionary
             'width' => 3,
             'position' => 2,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -29,7 +29,7 @@ class Batch extends AbstractDictionary
             'width' => 6,
             'position' => 3,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
         ],
 
@@ -38,7 +38,7 @@ class Batch extends AbstractDictionary
             'width' => 10,
             'position' => 4,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
         ],
 
@@ -47,7 +47,7 @@ class Batch extends AbstractDictionary
             'width' => 12,
             'position' => 5,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
             'number' => true,
         ],
@@ -57,7 +57,7 @@ class Batch extends AbstractDictionary
             'width' => 12,
             'position' => 6,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
             'number' => true,
         ],
@@ -67,7 +67,7 @@ class Batch extends AbstractDictionary
             'width' => 10,
             'position' => 7,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'blank' => true,
             'value' => '',
         ],
@@ -77,7 +77,7 @@ class Batch extends AbstractDictionary
             'width' => 19,
             'position' => 8,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'blank' => true,
             'value' => '',
         ],
@@ -87,7 +87,7 @@ class Batch extends AbstractDictionary
             'width' => 6,
             'position' => 9,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'blank' => true,
             'value' => '',
         ],
@@ -97,7 +97,7 @@ class Batch extends AbstractDictionary
             'width' => 8,
             'position' => 10,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
         ],
 
         'batchNumber' => [
@@ -105,7 +105,7 @@ class Batch extends AbstractDictionary
             'width' => 7,
             'position' => 11,
             'required' => false,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 8,
         ],
 
@@ -118,7 +118,7 @@ class Batch extends AbstractDictionary
             'width' => 1,
             'position' => 1,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '5',
         ],
 
@@ -127,7 +127,7 @@ class Batch extends AbstractDictionary
             'width' => 3,
             'position' => 2,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -136,7 +136,7 @@ class Batch extends AbstractDictionary
             'width' => 16,
             'position' => 3,
             'required' => true,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -145,7 +145,7 @@ class Batch extends AbstractDictionary
             'width' => 10,
             'position' => 5,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -154,7 +154,7 @@ class Batch extends AbstractDictionary
             'width' => 3,
             'position' => 6,
             'required' => true,
-            'type' => self::TYPE_ALPHA,
+            'type' => FieldTypes::TYPE_ALPHA,
             'value' => '',
         ],
 
@@ -163,7 +163,7 @@ class Batch extends AbstractDictionary
             'width' => 10,
             'position' => 7,
             'required' => true,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -172,7 +172,7 @@ class Batch extends AbstractDictionary
             'width' => 6,
             'position' => 8,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -181,7 +181,7 @@ class Batch extends AbstractDictionary
             'width' => 6,
             'position' => 9,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -190,7 +190,7 @@ class Batch extends AbstractDictionary
             'width' => 3,
             'position' => 10,
             'required' => false,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'blank' => true,
             'value' => '',
         ],
@@ -200,7 +200,7 @@ class Batch extends AbstractDictionary
             'width' => 1,
             'position' => 11,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '1',
         ],
 
@@ -209,7 +209,7 @@ class Batch extends AbstractDictionary
             'width' => 8,
             'position' => 12,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '1',
         ],
 
@@ -218,7 +218,7 @@ class Batch extends AbstractDictionary
             'width' => 7,
             'position' => 13,
             'required' => false,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
         ],
 

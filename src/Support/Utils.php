@@ -3,7 +3,7 @@
 namespace Clair\Ach\Support;
 
 use Carbon\Carbon;
-use Clair\Ach\Dictionaries\AbstractDictionary;
+use Clair\Ach\Dictionaries\FieldTypes;
 use Illuminate\Support\Arr;
 
 class Utils
@@ -96,7 +96,7 @@ class Utils
         while ($counter < $fieldCount) {
             foreach ($fields as $field) {
                 if ($field['position'] === $counter) {
-                    if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === AbstractDictionary::TYPE_ALPHANUMERIC) {
+                    if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === FieldTypes::TYPE_ALPHANUMERIC) {
                         $result .= str_pad($field['value'], $field['width']);
                     } else {
                         $value = $field['number'] ? number_format((float) $field['value'], 2, '', '') : $field['value'];

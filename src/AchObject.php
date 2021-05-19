@@ -4,10 +4,21 @@ namespace Clair\Ach;
 
 abstract class AchObject
 {
+    /**
+     * @var array
+     */
     protected array $fields = [];
 
+    /**
+     * @var array
+     */
     protected array $highLevelOverrides = [];
 
+    /**
+     * Boot the object.
+     *
+     * @return mixed
+     */
     abstract protected function boot();
 
     /**

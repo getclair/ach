@@ -2,7 +2,7 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\AbstractDictionary;
+use Clair\Ach\Dictionaries\FieldTypes;
 use Clair\Ach\Exceptions\AchValidationException;
 use Clair\Ach\Support\Utils;
 
@@ -72,17 +72,17 @@ class Validator
      */
     public function validateDataTypes(array $fields): bool
     {
-        $fields = array_filter($fields, fn ($field) => array_key_exists('blank', $field) && $field['blank'] !== true);
+        $fields = array_filter($fields, fn ($field) => ! array_key_exists('blank', $field) || ! $field['blank']);
 
         foreach ($fields as $field) {
             switch ($field['type']) {
-                case AbstractDictionary::TYPE_NUMERIC:
+                case FieldTypes::TYPE_NUMERIC:
                     $this->testRegex(self::$numericRegex, $field);
                     break;
-                case AbstractDictionary::TYPE_ALPHA:
+                case FieldTypes::TYPE_ALPHA:
                     $this->testRegex(self::$alphaRegex, $field);
                     break;
-                case AbstractDictionary::TYPE_ALPHANUMERIC:
+                case FieldTypes::TYPE_ALPHANUMERIC:
                     $this->testRegex(self::$alphanumericRegex, $field);
                     break;
             }
@@ -154,16 +154,14 @@ class Validator
      */
     public function validateRoutingNumber($number): bool
     {
-        $number = (string) $number;
+        $number = str_pad($number, 9, '0', STR_PAD_LEFT);
         $length = strlen($number);
 
         if ($length !== 9) {
             throw new AchValidationException("The ABA routing number '{$number}' is {$length}-digits long, but it should be 9-digits long.");
         }
 
-        $numbers = str_split($number);
-
-        if (Utils::createChecksum($numbers) % 10 !== 0) {
+        if (Utils::createChecksum(str_split($number)) % 10 !== 0) {
             throw new AchValidationException("The ABA routing number {$number} is invalid. Please ensure a valid 9-digit ABA routing number is passed.");
         }
 

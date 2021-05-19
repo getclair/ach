@@ -11,7 +11,7 @@ class Entry extends AbstractDictionary
             'width' => 1,
             'position' => 1,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '7',
         ],
 
@@ -20,7 +20,7 @@ class Entry extends AbstractDictionary
             'width' => 2,
             'position' => 2,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '05',
         ],
 
@@ -29,7 +29,7 @@ class Entry extends AbstractDictionary
             'width' => 80,
             'position' => 3,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -38,7 +38,7 @@ class Entry extends AbstractDictionary
             'width' => 4,
             'position' => 4,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '1',
             'number' => true,
         ],
@@ -48,7 +48,7 @@ class Entry extends AbstractDictionary
             'width' => 7,
             'position' => 5,
             'required' => false,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'blank' => true,
             'value' => '',
         ],
@@ -61,7 +61,7 @@ class Entry extends AbstractDictionary
             'width' => 1,
             'position' => 1,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '6',
         ],
 
@@ -70,7 +70,7 @@ class Entry extends AbstractDictionary
             'width' => 2,
             'position' => 2,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
         ],
 
         'receivingDFI' => [
@@ -78,7 +78,7 @@ class Entry extends AbstractDictionary
             'width' => 8,
             'position' => 3,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -87,7 +87,7 @@ class Entry extends AbstractDictionary
             'width' => 1,
             'position' => 4,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -96,7 +96,7 @@ class Entry extends AbstractDictionary
             'width' => 17,
             'position' => 5,
             'required' => true,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -105,7 +105,7 @@ class Entry extends AbstractDictionary
             'width' => 10,
             'position' => 6,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
             'number' => true,
         ],
@@ -115,7 +115,7 @@ class Entry extends AbstractDictionary
             'width' => 15,
             'position' => 7,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -124,7 +124,7 @@ class Entry extends AbstractDictionary
             'width' => 22,
             'position' => 8,
             'required' => true,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -133,7 +133,7 @@ class Entry extends AbstractDictionary
             'width' => 2,
             'position' => 9,
             'required' => false,
-            'type' => self::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -142,7 +142,7 @@ class Entry extends AbstractDictionary
             'width' => 1,
             'position' => 10,
             'required' => true,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '0',
         ],
 
@@ -151,7 +151,7 @@ class Entry extends AbstractDictionary
             'width' => 15,
             'position' => 11,
             'required' => false,
-            'type' => self::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'blank' => true,
             'value' => '',
         ],
