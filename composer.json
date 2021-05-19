@@ -1,0 +1,45 @@
+{
+  "name": "getclair/ach",
+  "description": "ACH parser for PHP",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "ach",
+    "nacha",
+    "reader",
+    "parser",
+    "php"
+  ],
+  "authors": [
+    {
+      "name": "Adam Campbell",
+      "email": "adam@getclair.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "ext-json": "*",
+    "illuminate/support": "^8.0|^9.0"
+  },
+  "require-dev": {
+    "nunomaduro/collision": "^4.0|^5.1",
+    "orchestra/testbench": "^5.0|^6.0",
+    "phpunit/phpunit": "^8.0|^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Clair\\Ach\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Clair\\Ach\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
