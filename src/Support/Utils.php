@@ -132,7 +132,7 @@ class Utils
         $fieldCount = count($fields);
         $result = '';
 
-        while ($counter < $fieldCount) {
+        while ($counter <= $fieldCount) {
             foreach ($fields as $field) {
                 if ($field['position'] === $counter) {
                     $result .= self::formatFieldValue($field);

@@ -9,6 +9,8 @@ use Illuminate\Support\Arr;
 
 class File extends AchObject
 {
+    public const LINE_WIDTH = 94;
+
     /**
      * @var array
      */
@@ -104,7 +106,7 @@ class File extends AchObject
         $result = '';
 
         for ($i = 0; $i < $rows; $i++) {
-            $result .= Utils::NEWLINE.str_pad('', 94, '9');
+            $result .= Utils::NEWLINE.str_pad('', self::LINE_WIDTH, '9');
         }
 
         return $result;
@@ -187,7 +189,6 @@ class File extends AchObject
         $headerString = $this->generateHeader();
         $controlString = $this->generateControl();
         [$batchString, $rows] = $this->generateBatches();
-        dd($batchString);
         $paddedRows = Utils::getNextMultipleDiff($rows, 10);
 
         $paddedString = $this->generatePaddedRows($paddedRows);

@@ -48,7 +48,7 @@ class Parser
 
         $fileOptions = $this->prepareOptions();
 
-        $file = new File($fileOptions, $this->hasAddenda);
+        $file = new File($fileOptions);
 
         foreach ($fileOptions->batches as $item) {
             $batch = new Batch($item['header']);

@@ -6,7 +6,7 @@ use Clair\Ach\Parser;
 
 class ParserTest extends TestCase
 {
-    public function test_parse_ach()
+    public function test_generate_ach_file()
     {
         $contents = file_get_contents(__DIR__.'/testdata/sample.ach');
 
@@ -14,8 +14,8 @@ class ParserTest extends TestCase
 
         $file = $parser->parse();
 
-//        dd($file);
+        $output = $file->generateFile();
 
-        dd($file->generateFile());
+        $this->assertSame($output, $contents);
     }
 }
