@@ -3,15 +3,12 @@
 namespace Clair\Ach;
 
 use Clair\Ach\Definitions\Batch as BatchDefinition;
-use Clair\Ach\Support\HasHeaderAndControl;
 use Clair\Ach\Support\Utils;
 use Closure;
 use Illuminate\Support\Arr;
 
 class Batch extends AchObject
 {
-    use HasHeaderAndControl;
-
     public const CREDIT_CODES = ['22', '23', '24', '32', '33', '34'];
     public const DEBIT_CODES = ['27', '28', '29', '37', '38', '39'];
 
@@ -47,11 +44,20 @@ class Batch extends AchObject
         }
     }
 
-    public function validate()
+    /**
+     * Validate batch header and control values.
+     *
+     * @return bool
+     * @throws Exceptions\AchValidationException
+     */
+    public function validate(): bool
     {
         $validator = new Validator();
 
-        $validator->validateRoutingNumber($this->options['originatingDFI']);
+        // Attach checksum to 8-digit ABA number.
+        $validator->validateRoutingNumber(
+            $this->options['originatingDFI'].Utils::computeCheckDigit($this->options['originatingDFI'])
+        );
 
         $validator->validateRequiredFields($this->header);
         $validator->validateLengths($this->header);
@@ -61,11 +67,16 @@ class Batch extends AchObject
         $validator->validateLengths($this->control);
         $validator->validateDataTypes($this->control);
 
-        $validator->validateServiceClassCode($this->getFieldValue('serviceClassCode'));
+        $validator->validateServiceClassCode($this->getHeaderValue('serviceClassCode'));
 
         return true;
     }
 
+    /**
+     * Add an entry.
+     *
+     * @param Entry $entry
+     */
     public function addEntry(Entry $entry)
     {
         $this->control['addendaCount'] += $entry->getRecordCount();
@@ -143,6 +154,8 @@ class Batch extends AchObject
     }
 
     /**
+     * Generate batch as a string.
+     *
      * @return string
      */
     public function generateString(): string
@@ -155,6 +168,11 @@ class Batch extends AchObject
         ]);
     }
 
+    /**
+     * Boot the batch.
+     *
+     * @return mixed|void
+     */
     protected function boot()
     {
         $this->setHeader();
@@ -163,16 +181,25 @@ class Batch extends AchObject
         $this->setValues();
     }
 
+    /**
+     * Set batch header.
+     */
     protected function setHeader()
     {
         $this->header = array_merge(Arr::get($this->options, 'header', []), BatchDefinition::$headers);
     }
 
+    /**
+     * Set batch control.
+     */
     protected function setControl()
     {
         $this->control = array_merge(Arr::get($this->options, 'control', []), BatchDefinition::$controls);
     }
 
+    /**
+     * Set batch values.
+     */
     protected function setValues()
     {
         // Set sub-strings
@@ -185,7 +212,8 @@ class Batch extends AchObject
         // Set explicit values
         foreach (['serviceClassCode', 'companyIdentification', 'originatingDFI'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setHeaderValue($key, settype($this->options[$key], $this->options[$key]['type'] ?? 'string'));
+                $this->setHeaderValue($key, $this->cast($this->options[$key], $this->header[$key]['type']));
+                $this->setControlValue($key, $this->cast($this->options[$key], $this->control[$key]['type']));
             }
         }
 
@@ -202,17 +230,20 @@ class Batch extends AchObject
         }
     }
 
+    /**
+     * Set batch overrides.
+     */
     protected function setOverrides()
     {
         foreach ($this->highLevelHeaderOverrides as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setFieldValue($key, $this->options[$key]);
+                $this->setHeaderValue($key, $this->options[$key]);
             }
         }
 
         foreach ($this->highLevelControlOverrides as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setFieldValue($key, $this->options[$key]);
+                $this->setControlValue($key, $this->options[$key]);
             }
         }
     }

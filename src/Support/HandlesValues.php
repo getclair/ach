@@ -2,8 +2,40 @@
 
 namespace Clair\Ach\Support;
 
-trait HasHeaderAndControl
+use Clair\Ach\Definitions\FieldTypes;
+
+trait HandlesValues
 {
+    /**
+     * Get a group value.
+     *
+     * @param $group
+     * @param $key
+     * @return mixed
+     */
+    public function getValue($group, $key)
+    {
+        if (isset($this->$group) && array_key_exists($key, $this->$group)) {
+            return $this->$group[$key]['value'];
+        }
+    }
+
+    /**
+     * Set a group value.
+     *
+     * @param $group
+     * @param $key
+     * @param $value
+     */
+    public function setValue($group, $key, $value = null)
+    {
+        if (isset($this->$group) && array_key_exists($key, $this->$group)) {
+            $cast = $this->options[$key]['type'] ?? FieldTypes::TYPE_ALPHANUMERIC;
+
+            $this->$group[$key]['value'] = $value; //$this->cast($value, $cast);
+        }
+    }
+
     /**
      * Get a header value.
      *
@@ -12,9 +44,7 @@ trait HasHeaderAndControl
      */
     public function getHeaderValue($key)
     {
-        if (array_key_exists($key, $this->header)) {
-            return $this->header[$key]['value'];
-        }
+        return $this->getValue('header', $key);
     }
 
     /**
@@ -25,9 +55,7 @@ trait HasHeaderAndControl
      */
     public function getControlValue($key)
     {
-        if (array_key_exists($key, $this->control)) {
-            return $this->control[$key]['value'];
-        }
+        return $this->getValue('control', $key);
     }
 
     /**
@@ -38,9 +66,7 @@ trait HasHeaderAndControl
      */
     public function setHeaderValue($key, $value)
     {
-        if (array_key_exists($key, $this->header)) {
-            $this->header[$key]['value'] = $value;
-        }
+        $this->setValue('header', $key, $value);
     }
 
     /**
@@ -51,9 +77,7 @@ trait HasHeaderAndControl
      */
     public function setControlValue($key, $value)
     {
-        if (array_key_exists($key, $this->control)) {
-            $this->control[$key]['value'] = $value;
-        }
+        $this->setValue('control', $key, $value);
     }
 
     /**
@@ -64,13 +88,7 @@ trait HasHeaderAndControl
      */
     public function getFieldValue($key)
     {
-        if ($this->getHeaderValue($key)) {
-            return $this->getHeaderValue($key);
-        }
-
-        if ($this->getControlValue($key)) {
-            return $this->getControlValue($key);
-        }
+        $this->getValue('fields', $key);
     }
 
     /**
@@ -81,13 +99,7 @@ trait HasHeaderAndControl
      */
     public function setFieldValue($key, $value)
     {
-        if ($this->getHeaderValue($key)) {
-            $this->setHeaderValue($key, $value);
-        }
-
-        if ($this->getControlValue($key)) {
-            $this->setControlValue($key, $value);
-        }
+        $this->setValue('fields', $key, $value);
     }
 
     /**

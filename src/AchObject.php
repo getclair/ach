@@ -2,12 +2,12 @@
 
 namespace Clair\Ach;
 
+use Clair\Ach\Definitions\FieldTypes;
+use Clair\Ach\Support\HandlesValues;
+
 abstract class AchObject
 {
-    /**
-     * @var array
-     */
-    protected array $fields = [];
+    use HandlesValues;
 
     /**
      * @var array
@@ -22,34 +22,6 @@ abstract class AchObject
     abstract protected function boot();
 
     /**
-     * Get a field value.
-     *
-     * @param $key
-     * @return mixed|string
-     */
-    public function getFieldValue($key)
-    {
-        if (array_key_exists($key, $this->fields)) {
-            return $this->fields[$key]['value'];
-        }
-
-        return '';
-    }
-
-    /**
-     * Set a field value.
-     *
-     * @param $key
-     * @param $value
-     */
-    public function setFieldValue($key, $value)
-    {
-        if (array_key_exists($key, $this->fields)) {
-            $this->fields[$key]['value'] = $value;
-        }
-    }
-
-    /**
      * Set any overrides.
      */
     protected function setOverrides()
@@ -59,5 +31,30 @@ abstract class AchObject
                 $this->setFieldValue($key, $this->options[$key]);
             }
         }
+    }
+
+    /**
+     * Cast a value into a PHP type from ACH type.
+     *
+     * @param $value
+     * @param $type
+     * @return mixed
+     */
+    public function cast($value, $type)
+    {
+        settype($value, $this->getCast($type));
+
+        return $value;
+    }
+
+    /**
+     * Return the PHP cast type.
+     *
+     * @param $type
+     * @return string
+     */
+    public function getCast($type): string
+    {
+        return $type === FieldTypes::TYPE_NUMERIC ? 'int' : 'string';
     }
 }

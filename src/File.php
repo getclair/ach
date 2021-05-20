@@ -3,14 +3,12 @@
 namespace Clair\Ach;
 
 use Clair\Ach\Definitions\File as FileDefinition;
-use Clair\Ach\Support\HasHeaderAndControl;
+use Clair\Ach\Support\HandlesValues;
 use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
 
 class File extends AchObject
 {
-    use HasHeaderAndControl;
-
     /**
      * @var array
      */

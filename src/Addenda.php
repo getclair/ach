@@ -13,6 +13,11 @@ class Addenda extends AchObject
     protected array $options;
 
     /**
+     * @var array
+     */
+    protected array $fields = [];
+
+    /**
      * @var array|string[]
      */
     protected array $highLevelOverrides = [
@@ -86,7 +91,7 @@ class Addenda extends AchObject
         // Set explicit values
         foreach (['addendaSequenceNumber', 'entryDetailSequenceNumber'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setFieldValue($key, settype($this->options[$key], $this->options[$key]['type'] ?? 'string'));
+                $this->setFieldValue($key, $this->cast($this->options[$key], $this->fields[$key]['type']));
             }
         }
     }

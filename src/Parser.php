@@ -4,6 +4,7 @@ namespace Clair\Ach;
 
 use Clair\Ach\Definitions\Addenda as AddendaDefinition;
 use Clair\Ach\Definitions\Batch as BatchDefinition;
+use Clair\Ach\Definitions\Entry as EntryDefinition;
 use Clair\Ach\Definitions\File as FileDefinition;
 use Clair\Ach\Support\Utils;
 
@@ -112,7 +113,7 @@ class Parser
                 // Add entry on batch
                 case 6:
                     $batch = $fileOptions->batches[$batchIndex];
-                    $batch['entry'][] = Utils::parseLine($line, BatchDefinition::$controls);
+                    $batch['entry'][] = new Entry(Utils::parseLine($line, EntryDefinition::$fields));
                     $fileOptions->updateBatch($batchIndex, $batch);
                     break;
 

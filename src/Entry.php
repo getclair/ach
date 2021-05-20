@@ -18,6 +18,11 @@ class Entry extends AchObject
     protected array $addendas = [];
 
     /**
+     * @var array
+     */
+    protected array $fields = [];
+
+    /**
      * @var array|string[]
      */
     protected array $highLevelOverrides = [
@@ -90,7 +95,7 @@ class Entry extends AchObject
         }
 
         $validator->validateRequiredFields($this->fields);
-        $validator->validateRoutingNumber($this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']);
+        $validator->validateRoutingNumber($this->fields['receivingDFI']['value'].$this->fields['checkDigit']['value']);
         $validator->validateLengths($this->fields);
         $validator->validateDataTypes($this->fields);
 

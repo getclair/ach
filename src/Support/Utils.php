@@ -133,11 +133,11 @@ class Utils
     /**
      * Return next multiple value.
      *
-     * @param $value
-     * @param $multiple
+     * @param int $value
+     * @param int $multiple
      * @return int|mixed
      */
-    public static function getNextMultiple($value, $multiple)
+    public static function getNextMultiple(int $value, int $multiple)
     {
         return $value % $multiple === 0 ? $value : $value + ($multiple - $value % $multiple);
     }
@@ -145,11 +145,11 @@ class Utils
     /**
      * Return next multiple value diff.
      *
-     * @param $value
-     * @param $multiple
+     * @param int $value
+     * @param int $multiple
      * @return int|mixed
      */
-    public static function getNextMultipleDiff($value, $multiple)
+    public static function getNextMultipleDiff(int $value, int $multiple)
     {
         return self::getNextMultiple($value, $multiple) - $value;
     }
