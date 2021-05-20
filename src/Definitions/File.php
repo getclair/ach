@@ -175,7 +175,6 @@ class File extends AbstractDefinition
             'position' => 6,
             'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
-            'number' => true,
         ],
 
         'totalCredit' => [
@@ -184,7 +183,6 @@ class File extends AbstractDefinition
             'position' => 7,
             'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
-            'number' => true,
         ],
 
         'reserved' => [

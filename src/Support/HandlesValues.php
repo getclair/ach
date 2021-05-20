@@ -87,7 +87,7 @@ trait HandlesValues
      */
     public function getFieldValue($key)
     {
-        $this->getValue('fields', $key);
+        return $this->getValue('fields', $key);
     }
 
     /**
@@ -99,18 +99,6 @@ trait HandlesValues
     public function setFieldValue($key, $value)
     {
         $this->setValue('fields', $key, $value);
-    }
-
-    /**
-     * Increment a control value.
-     *
-     * @param $key
-     */
-    public function incrementControlValue($key)
-    {
-        $value = $this->getControlValue($key);
-
-        $this->setControlValue($key, $value++);
     }
 
     /**

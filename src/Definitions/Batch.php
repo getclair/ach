@@ -112,7 +112,7 @@ class Batch extends AbstractDefinition
             'width' => 8,
             'position' => 12,
             'required' => true,
-            'type' => FieldTypes::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -172,7 +172,6 @@ class Batch extends AbstractDefinition
             'required' => true,
             'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
-            'number' => true,
         ],
 
         'totalCredit' => [
@@ -182,7 +181,6 @@ class Batch extends AbstractDefinition
             'required' => true,
             'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 0,
-            'number' => true,
         ],
 
         'companyIdentification' => [
@@ -219,7 +217,7 @@ class Batch extends AbstractDefinition
             'width' => 8,
             'position' => 10,
             'required' => true,
-            'type' => FieldTypes::TYPE_ALPHANUMERIC,
+            'type' => FieldTypes::TYPE_NUMERIC,
         ],
 
         'batchNumber' => [

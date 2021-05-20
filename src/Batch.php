@@ -150,14 +150,13 @@ class Batch extends AchObject
      */
     public function generateEntries()
     {
-        $result = '';
+        $results = [];
 
         foreach ($this->entries as $entry) {
-            $result .= $entry->generateString();
-            $result .= Utils::NEWLINE;
+            $results[] = $entry->generateString();
         }
 
-        return $result;
+        return implode(Utils::NEWLINE, $results);
     }
 
     /**
@@ -167,9 +166,8 @@ class Batch extends AchObject
      */
     public function generateString(): string
     {
-        return implode('', [
+        return implode(Utils::NEWLINE, [
             $this->generateHeader(),
-            Utils::NEWLINE,
             $this->generateEntries(),
             $this->generateControl(),
         ]);

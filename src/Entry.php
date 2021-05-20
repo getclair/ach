@@ -103,7 +103,7 @@ class Entry extends AchObject
         }
 
         $validator->validateRequiredFields($this->fields);
-        $validator->validateRoutingNumber($this->fields['receivingDFI']['value'].$this->fields['checkDigit']['value']);
+        $validator->validateRoutingNumber(Utils::addCheckDigit($this->fields['receivingDFI']['value']));
         $validator->validateLengths($this->fields);
         $validator->validateDataTypes($this->fields);
 
@@ -131,8 +131,12 @@ class Entry extends AchObject
         }
 
         // Set explicit values
-        foreach (['amount', 'idNumber', 'discretionaryData'] as $key) {
+        foreach (['amount', 'idNumber', 'discretionaryData', 'receivingDFI'] as $key) {
             if (array_key_exists($key, $this->options)) {
+                if ($key === 'receivingDFI') {
+                    $this->setFieldValue('checkDigit', Utils::computeCheckDigit($this->options[$key]));
+                }
+
                 $this->setFieldValue($key, $this->options[$key]);
             }
         }

@@ -6,6 +6,7 @@ use Clair\Ach\Definitions\File as FileDefinition;
 use Clair\Ach\Support\HandlesValues;
 use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
+use Spatie\Async\Pool;
 
 class File extends AchObject
 {
@@ -79,10 +80,10 @@ class File extends AchObject
      */
     public function addBatch(Batch $batch)
     {
+        $this->batchSequenceNumber++;
+
         $batch->setHeaderValue('batchNumber', $this->batchSequenceNumber);
         $batch->setControlValue('batchNumber', $this->batchSequenceNumber);
-
-        $this->batchSequenceNumber++;
 
         $this->batches[] = $batch;
     }
@@ -103,13 +104,13 @@ class File extends AchObject
      */
     public function generatePaddedRows($rows): string
     {
-        $result = '';
+        $results = [];
 
         for ($i = 0; $i < $rows; $i++) {
-            $result .= Utils::NEWLINE.str_pad('', self::LINE_WIDTH, '9');
+            $results[] = str_pad('', self::LINE_WIDTH, '9');
         }
 
-        return $result;
+        return implode(Utils::NEWLINE, $results);
     }
 
     /**
@@ -119,8 +120,9 @@ class File extends AchObject
      */
     public function generateBatches(): array
     {
-        $result = '';
+        $results = [];
         $rows = 2;
+        $batchCount = 0;
 
         $entryHash = 0;
         $addendaCount = 0;
@@ -145,22 +147,22 @@ class File extends AchObject
             }
 
             if (count($batch->getEntries()) > 0) {
-                $this->incrementControlValue('batchCount');
+                $batchCount++;
 
                 $rows = $rows + 2;
 
-                $string = $batch->generateString();
-                $result .= $string.Utils::NEWLINE;
+                $results[] = $batch->generateString();
             }
         }
 
+        $this->setControlValue('batchCount', $batchCount);
         $this->setControlValue('totalDebit', $totalDebit);
         $this->setControlValue('totalCredit', $totalCredit);
         $this->setControlValue('addendaCount', $addendaCount);
         $this->setControlValue('blockCount', Utils::getNextMultiple($rows, 10) / 10);
         $this->setControlValue('entryHash', substr($entryHash, -10));
 
-        return [$result, $rows];
+        return [implode(Utils::NEWLINE, $results), $rows];
     }
 
     /**
@@ -187,13 +189,11 @@ class File extends AchObject
     public function generateFile(): string
     {
         $headerString = $this->generateHeader();
-        $controlString = $this->generateControl();
         [$batchString, $rows] = $this->generateBatches();
-        $paddedRows = Utils::getNextMultipleDiff($rows, 10);
+        $controlString = $this->generateControl();
+        $paddedString = $this->generatePaddedRows(Utils::getNextMultipleDiff($rows, 10));
 
-        $paddedString = $this->generatePaddedRows($paddedRows);
-
-        return implode('', [$headerString, Utils::NEWLINE, $batchString, $controlString, $paddedString]);
+        return implode(Utils::NEWLINE, array_map('trim', [$headerString, $batchString, $controlString, $paddedString]));
     }
 
     /**

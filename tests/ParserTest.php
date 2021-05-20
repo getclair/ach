@@ -16,6 +16,6 @@ class ParserTest extends TestCase
 
         $output = $file->generateFile();
 
-        $this->assertSame($output, $contents);
+        $this->assertEquals($output, $contents);
     }
 }

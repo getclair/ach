@@ -12,8 +12,6 @@ class Parser
 {
     protected string $contents;
 
-    protected bool $hasAddenda = false;
-
     /**
      * Parser constructor.
      * @param string $contents
@@ -50,10 +48,10 @@ class Parser
 
         $file = new File($fileOptions);
 
-        foreach ($fileOptions->batches as $item) {
-            $batch = new Batch($item['header']);
+        foreach ($fileOptions->batches as $batchData) {
+            $batch = new Batch($batchData['header']);
 
-            foreach ($item['entry'] as $entry) {
+            foreach ($batchData['entry'] as $entry) {
                 $batch->addEntry($entry);
             }
 
@@ -104,11 +102,17 @@ class Parser
 
                     $fileOptions->updateBatch($batchIndex, [
                         'header' => Utils::parseLine($line, BatchDefinition::$header),
-                        'control' => [],
-                        'entry' => [],
-                        'addenda' => [],
                     ]);
 
+                    break;
+
+                // Update control on batch and move to the next one.
+                case 8:
+                    $batch = $fileOptions->batches[$batchIndex];
+                    $batch['control'] = Utils::parseLine($line, BatchDefinition::$control);
+                    $fileOptions->updateBatch($batchIndex, $batch);
+
+                    $batchIndex++;
                     break;
 
                 // Add entry on batch
@@ -125,17 +129,6 @@ class Parser
                     $batch['entry'][$index]->addAddenda(new Addenda(Utils::parseLine($line, AddendaDefinition::$fields)));
                     $fileOptions->updateBatch($batchIndex, $batch);
 
-                    $this->hasAddenda = true;
-
-                    break;
-
-                // Update control on batch and move to the next one.
-                case 8:
-                    $fileOptions->updateBatch($batchIndex, [
-                        'control' => Utils::parseLine($line, BatchDefinition::$control),
-                    ]);
-
-                    $batchIndex++;
                     break;
             }
         }

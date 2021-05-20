@@ -181,6 +181,11 @@ class Utils
         $width = $field['width'];
 
         if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === FieldTypes::TYPE_ALPHANUMERIC) {
+            //        if ($field['name'] === 'Amount') {
+//            dd(str_pad($value, $width, $character, STR_PAD_LEFT));
+//        }
+
+
             return str_pad($value, $width);
         }
 

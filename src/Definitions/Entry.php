@@ -39,8 +39,7 @@ class Entry extends AbstractDefinition
             'position' => 4,
             'required' => true,
             'type' => FieldTypes::TYPE_NUMERIC,
-            'value' => '1',
-            'number' => true,
+            'value' => 1,
         ],
 
         'entryDetailSequenceNumber' => [
@@ -78,7 +77,7 @@ class Entry extends AbstractDefinition
             'width' => 8,
             'position' => 3,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -106,8 +105,7 @@ class Entry extends AbstractDefinition
             'position' => 6,
             'required' => true,
             'type' => FieldTypes::TYPE_NUMERIC,
-            'value' => '',
-            'number' => true,
+            'value' => 0,
         ],
 
         'idNumber' => [
