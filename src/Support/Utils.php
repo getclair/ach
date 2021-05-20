@@ -169,7 +169,13 @@ class Utils
         return self::getNextMultiple($value, $multiple) - $value;
     }
 
-    protected static function formatFieldValue($field)
+    /**
+     * Format field values.
+     *
+     * @param $field
+     * @return string
+     */
+    protected static function formatFieldValue($field): string
     {
         $value = $field['value'];
         $width = $field['width'];

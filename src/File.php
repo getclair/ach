@@ -43,7 +43,7 @@ class File extends AchObject
      */
     public function __construct(FileOptions $options, $autoValidate = true)
     {
-        $this->options = $options->toArray();
+        $this->options = $options->header;
 
         $this->boot();
 
@@ -231,7 +231,7 @@ class File extends AchObject
     protected function setValues()
     {
         // This is done to make sure we have a 9-digit routing number
-        if (array_key_exists('immediateDestination', $this->options)) {
+        if (array_key_exists('immediateDestination', $this->options) && strlen(trim($this->options['immediateDestination'])) !== 9) {
             $this->setHeaderValue('immediateDestination', Utils::addCheckDigit($this->options['immediateDestination']));
         }
 
