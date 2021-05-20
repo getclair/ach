@@ -2,7 +2,7 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\Batch as BatchDictionary;
+use Clair\Ach\Definitions\Batch as BatchDefinition;
 use Clair\Ach\Support\HasHeaderAndControl;
 use Clair\Ach\Support\Utils;
 use Closure;
@@ -36,13 +36,13 @@ class Batch extends AchObject
      * @param array $options
      * @param false $autoValidate
      */
-    public function __construct(array $options, $autoValidate = false)
+    public function __construct(array $options, $autoValidate = true)
     {
         $this->options = $options;
 
         $this->boot();
 
-        if (! $autoValidate) {
+        if ($autoValidate) {
             $this->validate();
         }
     }
@@ -51,7 +51,7 @@ class Batch extends AchObject
     {
         $validator = new Validator();
 
-        $validator->validateRoutingNumber(Utils::computeCheckDigit($this->options['originatingDFI']));
+        $validator->validateRoutingNumber($this->options['originatingDFI']);
 
         $validator->validateRequiredFields($this->header);
         $validator->validateLengths($this->header);
@@ -88,11 +88,11 @@ class Batch extends AchObject
             }
         }
 
-        $this->setFieldValue('totalCredit', $totalCredit);
-        $this->setFieldValue('totalDebit', $totalDebit);
+        $this->setControlValue('totalCredit', $totalCredit);
+        $this->setControlValue('totalDebit', $totalDebit);
 
         // Add up the positions 4-11 and compute the total. Slice the 10 rightmost digits.
-        $this->setFieldValue('entryHash', substr($entryHash, -10));
+        $this->setControlValue('entryHash', substr($entryHash, -10));
     }
 
     /**
@@ -165,12 +165,12 @@ class Batch extends AchObject
 
     protected function setHeader()
     {
-        $this->header = array_merge(Arr::get($this->options, 'header', []), BatchDictionary::$headers);
+        $this->header = array_merge(Arr::get($this->options, 'header', []), BatchDefinition::$headers);
     }
 
     protected function setControl()
     {
-        $this->control = array_merge(Arr::get($this->options, 'control', []), BatchDictionary::$controls);
+        $this->control = array_merge(Arr::get($this->options, 'control', []), BatchDefinition::$controls);
     }
 
     protected function setValues()
@@ -178,24 +178,27 @@ class Batch extends AchObject
         // Set sub-strings
         foreach (['companyName', 'companyEntryDescription', 'companyDescriptiveDate'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setFieldValue($key, substr($this->options[$key], 0, $this->header[$key]['width']));
+                $this->setHeaderValue($key, substr($this->options[$key], 0, $this->header[$key]['width']));
             }
         }
 
         // Set explicit values
         foreach (['serviceClassCode', 'companyIdentification', 'originatingDFI'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setFieldValue($key, settype($this->options[$key], $this->options[$key]['type'] ?? 'string'));
+                $this->setHeaderValue($key, settype($this->options[$key], $this->options[$key]['type'] ?? 'string'));
             }
         }
 
         // Set custom values
         if (array_key_exists('effectiveEntryDate', $this->options)) {
-            $this->setFieldValue('effectiveEntryDate', Utils::formatDate($this->options['effectiveEntryDate']));
+            $this->setHeaderValue('effectiveEntryDate', Utils::formatDate($this->options['effectiveEntryDate']));
         }
 
         if (array_key_exists('originatingDFI', $this->options)) {
-            $this->setFieldValue('originatingDFI', substr(Utils::computeCheckDigit($this->options['originatingDFI']), 0, $this->header[$key]['width']));
+            $this->setHeaderValue(
+                'originatingDFI',
+                substr(Utils::computeCheckDigit($this->options['originatingDFI']), 0, $this->header[$key]['width'])
+            );
         }
     }
 

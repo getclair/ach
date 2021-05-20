@@ -1,8 +1,8 @@
 <?php
 
-namespace Clair\Ach\Dictionaries;
+namespace Clair\Ach\Definitions;
 
-class File extends AbstractDictionary
+class File extends AbstractDefinition
 {
     public static array $headers = [
 
@@ -41,7 +41,7 @@ class File extends AbstractDictionary
             'required' => true,
             'type' => FieldTypes::TYPE_NUMERIC,
             'paddingChar' => ' ',
-            'value' => '',
+            'value' => 0,
         ],
 
         'fileCreationDate' => [

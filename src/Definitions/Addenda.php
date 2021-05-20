@@ -1,8 +1,8 @@
 <?php
 
-namespace Clair\Ach\Dictionaries;
+namespace Clair\Ach\Definitions;
 
-class Addenda extends AbstractDictionary
+class Addenda extends AbstractDefinition
 {
     public static array $fields = [
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Clair\Ach\Dictionaries;
+namespace Clair\Ach\Definitions;
 
 class FieldTypes
 {

@@ -2,7 +2,7 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\Addenda as AddendaDictionary;
+use Clair\Ach\Definitions\Addenda as AddendaDefinition;
 use Illuminate\Support\Arr;
 
 class Addenda extends AchObject
@@ -24,13 +24,13 @@ class Addenda extends AchObject
      * @param array $options
      * @param false $autoValidate
      */
-    public function __construct(array $options, $autoValidate = false)
+    public function __construct(array $options, $autoValidate = true)
     {
         $this->options = $options;
 
         $this->boot();
 
-        if (! $autoValidate) {
+        if ($autoValidate) {
             $this->validate();
         }
     }
@@ -70,7 +70,7 @@ class Addenda extends AchObject
      */
     protected function setFields()
     {
-        $this->fields = array_merge(Arr::get($this->options, 'fields', []), AddendaDictionary::$fields);
+        $this->fields = array_merge(Arr::get($this->options, 'fields', []), AddendaDefinition::$fields);
     }
 
     /**

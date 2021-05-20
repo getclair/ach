@@ -1,8 +1,8 @@
 <?php
 
-namespace Clair\Ach\Dictionaries;
+namespace Clair\Ach\Definitions;
 
-class Batch extends AbstractDictionary
+class Batch extends AbstractDefinition
 {
     public static array $controls = [
 
@@ -66,9 +66,8 @@ class Batch extends AbstractDictionary
             'name' => 'Company Identification',
             'width' => 10,
             'position' => 7,
-            'required' => false,
-            'type' => FieldTypes::TYPE_ALPHANUMERIC,
-            'blank' => true,
+            'required' => true,
+            'type' => FieldTypes::TYPE_NUMERIC,
             'value' => '',
         ],
 
@@ -97,7 +96,7 @@ class Batch extends AbstractDictionary
             'width' => 8,
             'position' => 10,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
         ],
 
         'batchNumber' => [
@@ -108,7 +107,6 @@ class Batch extends AbstractDictionary
             'type' => FieldTypes::TYPE_NUMERIC,
             'value' => 8,
         ],
-
     ];
 
     public static array $headers = [
@@ -140,6 +138,16 @@ class Batch extends AbstractDictionary
             'value' => '',
         ],
 
+        'companyDiscretionaryData' => [
+            'name' => 'Company Discretionary Data',
+            'width' => 20,
+            'position' => 4,
+            'required' => false,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
+            'blank' => true,
+            'value' => '',
+        ],
+
         'companyIdentification' => [
             'name' => 'Company Identification',
             'width' => 10,
@@ -159,7 +167,7 @@ class Batch extends AbstractDictionary
         ],
 
         'companyEntryDescription' => [
-            'name' => 'Standard Entry Class Code',
+            'name' => 'Company Entry Description',
             'width' => 10,
             'position' => 7,
             'required' => true,
@@ -209,8 +217,8 @@ class Batch extends AbstractDictionary
             'width' => 8,
             'position' => 12,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
-            'value' => '1',
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
+            'value' => '',
         ],
 
         'batchNumber' => [

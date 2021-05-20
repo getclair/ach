@@ -2,7 +2,7 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\Entry as EntryDictionary;
+use Clair\Ach\Definitions\Entry as EntryDefinition;
 use Illuminate\Support\Arr;
 
 class Entry extends AchObject
@@ -29,7 +29,7 @@ class Entry extends AchObject
      * @param array $options
      * @param bool $autoValidate
      */
-    public function __construct(array $options, bool $autoValidate = false)
+    public function __construct(array $options, bool $autoValidate = true)
     {
         $this->options = $options;
 
@@ -91,7 +91,11 @@ class Entry extends AchObject
             $validator->validateAddendaTransactionCode($this->fields['transactionCode']['value']);
         }
 
-        $validator->validateRoutingNumber($this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']);
+//        dd($this->fields['receivingDFI']['value'], $this->fields['checkDigit']['value'], $this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']);
+
+        $validator->validateRoutingNumber(
+            $this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']
+        );
 
         $validator->validateLengths($this->fields);
 
@@ -116,7 +120,7 @@ class Entry extends AchObject
      */
     protected function setFields()
     {
-        $this->fields = array_merge(Arr::get($this->options, 'fields', []), EntryDictionary::$fields);
+        $this->fields = array_merge(Arr::get($this->options, 'fields', []), EntryDefinition::$fields);
     }
 
     /**

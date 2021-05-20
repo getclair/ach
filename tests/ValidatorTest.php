@@ -2,7 +2,7 @@
 
 namespace Clair\Ach\Tests;
 
-use Clair\Ach\Dictionaries\FieldTypes;
+use Clair\Ach\Definitions\FieldTypes;
 use Clair\Ach\Exceptions\AchValidationException;
 use Clair\Ach\Validator;
 
@@ -246,9 +246,10 @@ class ValidatorTest extends TestCase
     {
         return [
             'valid routing number, string' => ['021000021', true, true],
+            'invalid routing number, string' => ['021000022', true, false],
             'invalid routing number, number' => [021000021, true, false], // this becomes 004456465
             'invalid routing number, long' => ['12345678901', false, true],
-            'invalid routing number, short' => ['393939', true, false],
+            'invalid routing number, short' => ['777777', true, false],
         ];
     }
 }

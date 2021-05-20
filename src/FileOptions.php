@@ -31,14 +31,6 @@ class FileOptions implements Arrayable
     /**
      * @param mixed $batch
      */
-    public function addBatch(array $batch): void
-    {
-        $this->batches = $batch;
-    }
-
-    /**
-     * @param mixed $batch
-     */
     public function updateBatch($index, array $values): void
     {
         $this->batches[$index] = array_merge($this->batches[$index], $values);

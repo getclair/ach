@@ -2,7 +2,7 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\FieldTypes;
+use Clair\Ach\Definitions\FieldTypes;
 use Clair\Ach\Exceptions\AchValidationException;
 use Clair\Ach\Support\Utils;
 
@@ -72,7 +72,7 @@ class Validator
      */
     public function validateDataTypes(array $fields): bool
     {
-        $fields = array_filter($fields, fn ($field) => ! array_key_exists('blank', $field) || ! $field['blank']);
+        $fields = array_filter($fields, fn ($field) => (! array_key_exists('blank', $field) || ! $field['blank']) && $field['value'] !== '');
 
         foreach ($fields as $field) {
             switch ($field['type']) {
@@ -154,6 +154,7 @@ class Validator
      */
     public function validateRoutingNumber($number): bool
     {
+        $number = preg_replace('/[^0-9]/', '', $number);
         $number = str_pad($number, 9, '0', STR_PAD_LEFT);
         $length = strlen($number);
 
@@ -161,7 +162,7 @@ class Validator
             throw new AchValidationException("The ABA routing number '{$number}' is {$length}-digits long, but it should be 9-digits long.");
         }
 
-        if (Utils::createChecksum(str_split($number)) % 10 !== 0) {
+        if (Utils::createChecksum($number) % 10 !== 0) {
             throw new AchValidationException("The ABA routing number {$number} is invalid. Please ensure a valid 9-digit ABA routing number is passed.");
         }
 
@@ -185,7 +186,7 @@ class Validator
         }
 
         if (! preg_match($regex, $subject)) {
-            throw new AchValidationException("Invalid data type: {$field['name']} is not a an expected {$field['type']}");
+            throw new AchValidationException("Invalid data type: {$field['name']} is not a an expected {$field['type']}: {$field['value']}");
         }
 
         return true;

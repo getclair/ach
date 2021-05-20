@@ -2,7 +2,7 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\File as FileDictionary;
+use Clair\Ach\Definitions\File as FileDefinition;
 use Clair\Ach\Support\HasHeaderAndControl;
 use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
@@ -48,13 +48,13 @@ class File extends AchObject
      * @param array $options
      * @param false $autoValidate
      */
-    public function __construct(FileOptions $options, $autoValidate = false)
+    public function __construct(FileOptions $options, $autoValidate = true)
     {
         $this->options = $options->toArray();
 
         $this->boot();
 
-        if (! $autoValidate) {
+        if ($autoValidate) {
             $this->validate();
         }
     }
@@ -222,12 +222,15 @@ class File extends AchObject
 
     protected function setHeader()
     {
-        $this->header = array_merge(Arr::get($this->options, 'header', []), FileDictionary::$headers);
+        $this->header = array_merge(Arr::get($this->options, 'header', []), FileDefinition::$headers);
+
+        $this->header['fileCreationDate']['value'] = Utils::formatDate();
+        $this->header['fileCreationTime']['value'] = Utils::formatTime();
     }
 
     protected function setControl()
     {
-        $this->control = array_merge(Arr::get($this->options, 'control', []), FileDictionary::$controls);
+        $this->control = array_merge(Arr::get($this->options, 'control', []), FileDefinition::$controls);
     }
 
     protected function setValues()

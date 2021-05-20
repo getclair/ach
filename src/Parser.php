@@ -2,9 +2,9 @@
 
 namespace Clair\Ach;
 
-use Clair\Ach\Dictionaries\Addenda as AddendaDictionary;
-use Clair\Ach\Dictionaries\Batch as BatchDictionary;
-use Clair\Ach\Dictionaries\File as FileDictionary;
+use Clair\Ach\Definitions\Addenda as AddendaDefinition;
+use Clair\Ach\Definitions\Batch as BatchDefinition;
+use Clair\Ach\Definitions\File as FileDefinition;
 use Clair\Ach\Support\Utils;
 
 class Parser
@@ -39,7 +39,7 @@ class Parser
      * @return File
      * @throws \Exception
      */
-    protected function parse(): File
+    public function parse(): File
     {
         if (strlen($this->contents) === 0) {
             throw new \Exception('Contents are empty.');
@@ -84,39 +84,56 @@ class Parser
 
         foreach ($this->lines() as $line) {
             switch ((int) $line[0]) {
+
+                // Set file header
                 case 1:
-                    $fileOptions->setHeader(Utils::parseLine($line, FileDictionary::$headers));
+                    $fileOptions->setHeader(Utils::parseLine($line, FileDefinition::$headers));
                     break;
+
+                // Set file control
                 case 9:
-                    $fileOptions->setControl(Utils::parseLine($line, FileDictionary::$controls));
+                    $fileOptions->setControl(Utils::parseLine($line, FileDefinition::$controls));
                     break;
+
+                // Setup batch
                 case 5:
-                    $fileOptions->addBatch([
-                        'header' => Utils::parseLine($line, BatchDictionary::$headers),
+                    if (! array_key_exists($batchIndex, $fileOptions->batches)) {
+                        $fileOptions->batches[$batchIndex] = [];
+                    }
+
+                    $fileOptions->updateBatch($batchIndex, [
+                        'header' => Utils::parseLine($line, BatchDefinition::$headers),
+                        'control' => [],
                         'entry' => [],
                         'addenda' => [],
                     ]);
                     break;
-                case 8:
-                    $fileOptions->updateBatch($batchIndex, [
-                        'control' => Utils::parseLine($line, BatchDictionary::$controls),
-                    ]);
 
-                    $batchIndex++;
-                    break;
+                // Add entry on batch
                 case 6:
                     $batch = $fileOptions->batches[$batchIndex];
-                    $batch['entry'][] = Utils::parseLine($line, BatchDictionary::$controls);
+                    $batch['entry'][] = Utils::parseLine($line, BatchDefinition::$controls);
                     $fileOptions->updateBatch($batchIndex, $batch);
                     break;
+
+                // Add addenda
                 case 7:
                     $batch = $fileOptions->batches[$batchIndex];
                     $index = count($batch['entry']) - 1;
-                    $batch['entry'][$index]->addAddenda(new Addenda(Utils::parseLine($line, AddendaDictionary::$fields)));
+                    $batch['entry'][$index]->addAddenda(new Addenda(Utils::parseLine($line, AddendaDefinition::$fields)));
                     $fileOptions->updateBatch($batchIndex, $batch);
 
                     $this->hasAddenda = true;
 
+                    break;
+
+                // Update control on batch and move to the next one.
+                case 8:
+                    $fileOptions->updateBatch($batchIndex, [
+                        'control' => Utils::parseLine($line, BatchDefinition::$controls),
+                    ]);
+
+                    $batchIndex++;
                     break;
             }
         }

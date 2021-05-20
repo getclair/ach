@@ -4,6 +4,12 @@ namespace Clair\Ach\Support;
 
 trait HasHeaderAndControl
 {
+    /**
+     * Get a header value.
+     *
+     * @param $key
+     * @return mixed
+     */
     public function getHeaderValue($key)
     {
         if (array_key_exists($key, $this->header)) {
@@ -11,6 +17,12 @@ trait HasHeaderAndControl
         }
     }
 
+    /**
+     * Get a control value.
+     *
+     * @param $key
+     * @return mixed
+     */
     public function getControlValue($key)
     {
         if (array_key_exists($key, $this->control)) {
@@ -18,6 +30,12 @@ trait HasHeaderAndControl
         }
     }
 
+    /**
+     * Set a header value.
+     *
+     * @param $key
+     * @param $value
+     */
     public function setHeaderValue($key, $value)
     {
         if (array_key_exists($key, $this->header)) {
@@ -25,6 +43,12 @@ trait HasHeaderAndControl
         }
     }
 
+    /**
+     * Set a control value.
+     *
+     * @param $key
+     * @param $value
+     */
     public function setControlValue($key, $value)
     {
         if (array_key_exists($key, $this->control)) {
@@ -32,17 +56,45 @@ trait HasHeaderAndControl
         }
     }
 
+    /**
+     * Get a header or control value, whichever occurs first.
+     *
+     * @param $key
+     * @return mixed
+     */
     public function getFieldValue($key)
     {
-        return $this->getHeaderValue($key) ?? $this->getControlValue($key);
+        if ($this->getHeaderValue($key)) {
+            return $this->getHeaderValue($key);
+        }
+
+        if ($this->getControlValue($key)) {
+            return $this->getControlValue($key);
+        }
     }
 
+    /**
+     * Set a header and/or control value.
+     *
+     * @param $key
+     * @param $value
+     */
     public function setFieldValue($key, $value)
     {
-        $this->setHeaderValue($key, $value);
-        $this->setControlValue($key, $value);
+        if ($this->getHeaderValue($key)) {
+            $this->setHeaderValue($key, $value);
+        }
+
+        if ($this->getControlValue($key)) {
+            $this->setControlValue($key, $value);
+        }
     }
 
+    /**
+     * Increment a control value.
+     *
+     * @param $key
+     */
     public function incrementControlValue($key)
     {
         $value = $this->getControlValue($key);
