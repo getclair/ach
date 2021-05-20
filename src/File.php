@@ -12,11 +12,6 @@ class File extends AchObject
     /**
      * @var array
      */
-    protected array $options;
-
-    /**
-     * @var array
-     */
     protected array $batches = [];
 
     /**

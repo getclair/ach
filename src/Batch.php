@@ -12,8 +12,6 @@ class Batch extends AchObject
     public const CREDIT_CODES = ['22', '23', '24', '32', '33', '34'];
     public const DEBIT_CODES = ['27', '28', '29', '37', '38', '39'];
 
-    protected array $options;
-
     protected array $entries = [];
 
     protected array $header = [];
@@ -79,7 +77,7 @@ class Batch extends AchObject
      */
     public function addEntry(Entry $entry)
     {
-        $this->control['addendaCount'] += $entry->getRecordCount();
+        $this->control['addendaCount']['value'] += $entry->getRecordCount();
 
         $this->entries[] = $entry;
 
@@ -212,8 +210,8 @@ class Batch extends AchObject
         // Set explicit values
         foreach (['serviceClassCode', 'companyIdentification', 'originatingDFI'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setHeaderValue($key, $this->cast($this->options[$key], $this->header[$key]['type']));
-                $this->setControlValue($key, $this->cast($this->options[$key], $this->control[$key]['type']));
+                $this->setHeaderValue($key, $this->options[$key]);
+                $this->setControlValue($key, $this->options[$key]);
             }
         }
 

@@ -3,15 +3,11 @@
 namespace Clair\Ach;
 
 use Clair\Ach\Definitions\Entry as EntryDefinition;
+use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
 
 class Entry extends AchObject
 {
-    /**
-     * @var array
-     */
-    protected array $options;
-
     /**
      * @var array
      */
@@ -81,6 +77,18 @@ class Entry extends AchObject
     }
 
     /**
+     * Generate entry as string.
+     *
+     * @return string
+     */
+    public function generateString(): string
+    {
+        $addendas = array_map(fn ($addenda) => Utils::generateString($addenda->fields), $this->addendas);
+
+        return Utils::generateString($this->fields).implode(Utils::NEWLINE, $addendas);
+    }
+
+    /**
      * Validate the fields.
      *
      * @return bool
@@ -136,7 +144,7 @@ class Entry extends AchObject
         // Set explicit values
         foreach (['amount', 'idNumber', 'discretionaryData'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setFieldValue($key, settype($this->options[$key], $this->options[$key]['type'] ?? 'string'));
+                $this->setFieldValue($key, $this->options[$key]);
             }
         }
     }

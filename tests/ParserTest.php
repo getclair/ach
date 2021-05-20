@@ -12,6 +12,8 @@ class ParserTest extends TestCase
 
         $parser = new Parser($contents);
 
-        $result = $parser->parse();
+        $file = $parser->parse();
+
+        dd($file->generateFile());
     }
 }

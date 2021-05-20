@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class Utils
 {
-    public const NEWLINE = "\r\n";
+    public const NEWLINE = "\n";
     public const ACH_DATE_FORMAT = 'ymd';
     public const ACH_TIME_FORMAT = 'Hi';
 
@@ -117,7 +117,7 @@ class Utils
                     if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === FieldTypes::TYPE_ALPHANUMERIC) {
                         $result .= str_pad($field['value'], $field['width']);
                     } else {
-                        $value = $field['number'] ? number_format((float) $field['value'], 2, '', '') : $field['value'];
+                        $value = isset($field['number']) ? number_format((float) $field['value'], 2, '', '') : $field['value'];
                         $character = array_key_exists('paddingChar', $field) ? $field['paddingChar'] : 0;
                         $result .= str_pad($value, $field['width'], $character, STR_PAD_LEFT);
                     }

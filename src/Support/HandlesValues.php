@@ -30,9 +30,8 @@ trait HandlesValues
     public function setValue($group, $key, $value = null)
     {
         if (isset($this->$group) && array_key_exists($key, $this->$group)) {
-            $cast = $this->options[$key]['type'] ?? FieldTypes::TYPE_ALPHANUMERIC;
-
-            $this->$group[$key]['value'] = $value; //$this->cast($value, $cast);
+            $cast = $this->{$group}[$key]['type'] ?? FieldTypes::TYPE_ALPHANUMERIC;
+            $this->$group[$key]['value'] = $this->cast($value, $cast);
         }
     }
 
@@ -112,5 +111,30 @@ trait HandlesValues
         $value = $this->getControlValue($key);
 
         $this->setControlValue($key, $value++);
+    }
+
+    /**
+     * Cast a value into a PHP type from ACH type.
+     *
+     * @param $value
+     * @param $type
+     * @return mixed
+     */
+    public function cast($value, $type)
+    {
+        settype($value, $this->getCast($type));
+
+        return $value;
+    }
+
+    /**
+     * Return the PHP cast type.
+     *
+     * @param $type
+     * @return string
+     */
+    public function getCast($type): string
+    {
+        return $type === FieldTypes::TYPE_NUMERIC ? 'int' : 'string';
     }
 }
