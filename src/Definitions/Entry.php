@@ -140,7 +140,7 @@ class Entry extends AbstractDefinition
             'width' => 1,
             'position' => 10,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '0',
         ],
 
@@ -149,7 +149,7 @@ class Entry extends AbstractDefinition
             'width' => 15,
             'position' => 11,
             'required' => false,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'blank' => true,
             'value' => '',
         ],

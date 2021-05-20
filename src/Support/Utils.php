@@ -130,19 +130,19 @@ class Utils
     {
         $counter = 0;
         $fieldCount = count($fields);
-        $result = '';
+        $results = [];
 
         while ($counter <= $fieldCount) {
             foreach ($fields as $field) {
                 if ($field['position'] === $counter) {
-                    $result .= self::formatFieldValue($field);
+                    $results[] = self::formatFieldValue($field);
                 }
             }
 
             $counter++;
         }
 
-        return $result;
+        return implode('', $results);
     }
 
     /**
@@ -181,11 +181,6 @@ class Utils
         $width = $field['width'];
 
         if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === FieldTypes::TYPE_ALPHANUMERIC) {
-            //        if ($field['name'] === 'Amount') {
-//            dd(str_pad($value, $width, $character, STR_PAD_LEFT));
-//        }
-
-
             return str_pad($value, $width);
         }
 

@@ -48,6 +48,7 @@ class Entry extends AchObject
      */
     public function addAddenda(Addenda $addenda)
     {
+        // Set addendaId to 1 if there's any addenda
         $this->setFieldValue('addendaId', '1');
 
         $addenda->setFieldValue('addendaSequenceNumber', $this->getRecordCount());
@@ -98,7 +99,7 @@ class Entry extends AchObject
     {
         $validator = new Validator();
 
-        if (Arr::get($this->fields, 'addendaId.value') === '0') {
+        if ($this->getFieldValue('addendaId') === '0') {
             $validator->validateAddendaTransactionCode($this->fields['transactionCode']['value']);
         }
 
