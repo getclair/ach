@@ -4,7 +4,7 @@ namespace Clair\Ach\Definitions;
 
 class File extends AbstractDefinition
 {
-    public static array $headers = [
+    public static array $header = [
 
         'recordTypeCode' => [
             'name' => 'Record Type Code',
@@ -127,7 +127,7 @@ class File extends AbstractDefinition
 
     ];
 
-    public static array $controls = [
+    public static array $control = [
 
         'recordTypeCode' => [
             'name' => 'Record Type Code',

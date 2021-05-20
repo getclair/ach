@@ -184,7 +184,7 @@ class Batch extends AchObject
      */
     protected function setHeader()
     {
-        $this->header = array_merge(Arr::get($this->options, 'header', []), BatchDefinition::$headers);
+        $this->header = array_merge(Arr::get($this->options, 'header', []), BatchDefinition::$header);
     }
 
     /**
@@ -192,7 +192,7 @@ class Batch extends AchObject
      */
     protected function setControl()
     {
-        $this->control = array_merge(Arr::get($this->options, 'control', []), BatchDefinition::$controls);
+        $this->control = array_merge(Arr::get($this->options, 'control', []), BatchDefinition::$control);
     }
 
     /**
@@ -208,23 +208,22 @@ class Batch extends AchObject
         }
 
         // Set explicit values
-        foreach (['serviceClassCode', 'companyIdentification', 'originatingDFI'] as $key) {
+        foreach (['serviceClassCode', 'companyIdentification', 'originatingDFI', 'effectiveEntryDate', 'settlementDate'] as $key) {
             if (array_key_exists($key, $this->options)) {
-                $this->setHeaderValue($key, $this->options[$key]);
-                $this->setControlValue($key, $this->options[$key]);
+                $value = $this->options[$key];
+
+                if ($key === 'originatingDFI') {
+                    $value = substr(Utils::addCheckDigit($this->options['originatingDFI']), 0, $this->header[$key]['width']);
+                }
+
+                if ($key === 'effectiveEntryDate') {
+                    $this->options[$key] = Utils::parseDate($this->options['effectiveEntryDate']);
+                    $value = Utils::formatDate($this->options[$key]);
+                }
+
+                $this->setHeaderValue($key, $value);
+                $this->setControlValue($key, $value);
             }
-        }
-
-        // Set custom values
-        if (array_key_exists('effectiveEntryDate', $this->options)) {
-            $this->setHeaderValue('effectiveEntryDate', Utils::formatDate($this->options['effectiveEntryDate']));
-        }
-
-        if (array_key_exists('originatingDFI', $this->options)) {
-            $this->setHeaderValue(
-                'originatingDFI',
-                substr(Utils::computeCheckDigit($this->options['originatingDFI']), 0, $this->header[$key]['width'])
-            );
         }
     }
 

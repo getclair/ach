@@ -214,7 +214,7 @@ class File extends AchObject
      */
     protected function setHeader()
     {
-        $this->header = array_merge(Arr::get($this->options, 'header', []), FileDefinition::$headers);
+        $this->header = array_merge(Arr::get($this->options, 'header', []), FileDefinition::$header);
 
         $this->header['fileCreationDate']['value'] = Utils::formatDate();
         $this->header['fileCreationTime']['value'] = Utils::formatTime();
@@ -225,7 +225,7 @@ class File extends AchObject
      */
     protected function setControl()
     {
-        $this->control = array_merge(Arr::get($this->options, 'control', []), FileDefinition::$controls);
+        $this->control = array_merge(Arr::get($this->options, 'control', []), FileDefinition::$control);
     }
 
     /**

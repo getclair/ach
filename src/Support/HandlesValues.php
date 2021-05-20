@@ -47,17 +47,6 @@ trait HandlesValues
     }
 
     /**
-     * Get a control value.
-     *
-     * @param $key
-     * @return mixed
-     */
-    public function getControlValue($key)
-    {
-        return $this->getValue('control', $key);
-    }
-
-    /**
      * Set a header value.
      *
      * @param $key
@@ -66,6 +55,17 @@ trait HandlesValues
     public function setHeaderValue($key, $value)
     {
         $this->setValue('header', $key, $value);
+    }
+
+    /**
+     * Get a control value.
+     *
+     * @param $key
+     * @return mixed
+     */
+    public function getControlValue($key)
+    {
+        return $this->getValue('control', $key);
     }
 
     /**

@@ -80,11 +80,22 @@ class Utils
     }
 
     /**
+     * Return ABA number with check digit.
+     *
+     * @param $aba_number
+     * @return string
+     */
+    public static function addCheckDigit($aba_number): string
+    {
+        return $aba_number.self::computeCheckDigit($aba_number);
+    }
+
+    /**
      * Create a valid ACH date in YYMMDD format.
      * @param null $date
      * @return string
      */
-    public static function formatDate($date = null)
+    public static function formatDate($date = null): string
     {
         return Carbon::parse($date)->format(self::ACH_DATE_FORMAT);
     }
@@ -94,9 +105,19 @@ class Utils
      * @param null $date
      * @return string
      */
-    public static function formatTime($date = null)
+    public static function formatTime($date = null): string
     {
         return Carbon::parse($date)->format(self::ACH_TIME_FORMAT);
+    }
+
+    /**
+     * Parse an ACH date into a string.
+     * @param null $date
+     * @return string
+     */
+    public static function parseDate($date): string
+    {
+        return Carbon::createFromFormat(self::ACH_DATE_FORMAT, $date)->toDateString();
     }
 
     /**
@@ -114,13 +135,7 @@ class Utils
         while ($counter < $fieldCount) {
             foreach ($fields as $field) {
                 if ($field['position'] === $counter) {
-                    if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === FieldTypes::TYPE_ALPHANUMERIC) {
-                        $result .= str_pad($field['value'], $field['width']);
-                    } else {
-                        $value = isset($field['number']) ? number_format((float) $field['value'], 2, '', '') : $field['value'];
-                        $character = array_key_exists('paddingChar', $field) ? $field['paddingChar'] : 0;
-                        $result .= str_pad($value, $field['width'], $character, STR_PAD_LEFT);
-                    }
+                    $result .= self::formatFieldValue($field);
                 }
             }
 
@@ -152,5 +167,23 @@ class Utils
     public static function getNextMultipleDiff(int $value, int $multiple)
     {
         return self::getNextMultiple($value, $multiple) - $value;
+    }
+
+    protected static function formatFieldValue($field)
+    {
+        $value = $field['value'];
+        $width = $field['width'];
+
+        if (Arr::get($field, 'blank') === true || Arr::get($field, 'type') === FieldTypes::TYPE_ALPHANUMERIC) {
+            return str_pad($value, $width);
+        }
+
+        if (isset($field['number'])) {
+            $value = number_format((float) $value, 2, '', '');
+        }
+
+        $character = array_key_exists('paddingChar', $field) ? $field['paddingChar'] : '0';
+
+        return str_pad($value, $width, $character, STR_PAD_LEFT);
     }
 }

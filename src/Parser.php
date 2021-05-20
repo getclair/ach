@@ -88,12 +88,12 @@ class Parser
 
                 // Set file header
                 case 1:
-                    $fileOptions->setHeader(Utils::parseLine($line, FileDefinition::$headers));
+                    $fileOptions->setHeader(Utils::parseLine($line, FileDefinition::$header));
                     break;
 
                 // Set file control
                 case 9:
-                    $fileOptions->setControl(Utils::parseLine($line, FileDefinition::$controls));
+                    $fileOptions->setControl(Utils::parseLine($line, FileDefinition::$control));
                     break;
 
                 // Setup batch
@@ -103,7 +103,7 @@ class Parser
                     }
 
                     $fileOptions->updateBatch($batchIndex, [
-                        'header' => Utils::parseLine($line, BatchDefinition::$headers),
+                        'header' => Utils::parseLine($line, BatchDefinition::$header),
                         'control' => [],
                         'entry' => [],
                         'addenda' => [],
@@ -131,7 +131,7 @@ class Parser
                 // Update control on batch and move to the next one.
                 case 8:
                     $fileOptions->updateBatch($batchIndex, [
-                        'control' => Utils::parseLine($line, BatchDefinition::$controls),
+                        'control' => Utils::parseLine($line, BatchDefinition::$control),
                     ]);
 
                     $batchIndex++;
