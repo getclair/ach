@@ -46,9 +46,7 @@ class Addenda extends AchObject
         $validator = new Validator();
 
         $validator->validateRequiredFields($this->fields);
-
         $validator->validateLengths($this->fields);
-
         $validator->validateDataTypes($this->fields);
 
         return true;

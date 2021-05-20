@@ -85,20 +85,13 @@ class Entry extends AchObject
     {
         $validator = new Validator();
 
-        $validator->validateRequiredFields($this->fields);
-
         if (Arr::get($this->fields, 'addendaId.value') === '0') {
             $validator->validateAddendaTransactionCode($this->fields['transactionCode']['value']);
         }
 
-//        dd($this->fields['receivingDFI']['value'], $this->fields['checkDigit']['value'], $this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']);
-
-        $validator->validateRoutingNumber(
-            $this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']
-        );
-
+        $validator->validateRequiredFields($this->fields);
+        $validator->validateRoutingNumber($this->fields['receivingDFI']['value'] + $this->fields['checkDigit']['value']);
         $validator->validateLengths($this->fields);
-
         $validator->validateDataTypes($this->fields);
 
         return true;

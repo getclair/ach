@@ -70,11 +70,8 @@ class File extends AchObject
         $validator = new Validator();
 
         $validator->validateLengths($this->header);
-
         $validator->validateDataTypes($this->header);
-
         $validator->validateLengths($this->control);
-
         $validator->validateDataTypes($this->control);
 
         return true;
@@ -203,15 +200,14 @@ class File extends AchObject
 
         $paddedString = $this->generatePaddedRows($paddedRows);
 
-        return implode('', [
-            $headerString,
-            Utils::NEWLINE,
-            $batchString,
-            $controlString,
-            $paddedString,
-        ]);
+        return implode('', [$headerString, Utils::NEWLINE, $batchString, $controlString, $paddedString]);
     }
 
+    /**
+     * Boot the file object.
+     *
+     * @return mixed|void
+     */
     protected function boot()
     {
         $this->setHeader();
@@ -220,6 +216,9 @@ class File extends AchObject
         $this->setValues();
     }
 
+    /**
+     * Set header values.
+     */
     protected function setHeader()
     {
         $this->header = array_merge(Arr::get($this->options, 'header', []), FileDefinition::$headers);
@@ -228,11 +227,17 @@ class File extends AchObject
         $this->header['fileCreationTime']['value'] = Utils::formatTime();
     }
 
+    /**
+     * Set control values.
+     */
     protected function setControl()
     {
         $this->control = array_merge(Arr::get($this->options, 'control', []), FileDefinition::$controls);
     }
 
+    /**
+     * Set object attributes.
+     */
     protected function setValues()
     {
         // This is done to make sure we have a 9-digit routing number
