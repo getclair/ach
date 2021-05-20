@@ -6,10 +6,25 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class FileOptions implements Arrayable
 {
+    /**
+     * Header raw data.
+     *
+     * @var
+     */
     public $header;
 
+    /**
+     * Control raw data.
+     *
+     * @var
+     */
     public $control;
 
+    /**
+     * Batches raw data.
+     *
+     * @var array
+     */
     public array $batches = [];
 
     /**

@@ -131,12 +131,10 @@ class File extends AchObject
             $totalCredit += $batch->getControlValue('totalCredit');
 
             foreach ($batch->getEntries() as $entry) {
-                $entry->setFieldValue(
-                    'traceNumber',
-                    $entry->getFieldValue('traceNumber')
-                        ? $entry->getFieldValue('traceNumber')
-                        : substr($this->getHeaderValue('immediateOrigin'), 0, 8).str_pad($addendaCount, 7, '0', STR_PAD_LEFT)
-                );
+                $traceNumber = $entry->getFieldValue('traceNumber')
+                    ?: substr($this->getHeaderValue('immediateOrigin'), 0, 8).str_pad($addendaCount, 7, '0', STR_PAD_LEFT);
+
+                $entry->setFieldValue('traceNumber', $traceNumber);
 
                 $entryHash += (int) $entry->getFieldValue('receivingDFI');
 
@@ -189,6 +187,7 @@ class File extends AchObject
         $headerString = $this->generateHeader();
         $controlString = $this->generateControl();
         [$batchString, $rows] = $this->generateBatches();
+        dd($batchString);
         $paddedRows = Utils::getNextMultipleDiff($rows, 10);
 
         $paddedString = $this->generatePaddedRows($paddedRows);

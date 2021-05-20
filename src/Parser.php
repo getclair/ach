@@ -108,6 +108,7 @@ class Parser
                         'entry' => [],
                         'addenda' => [],
                     ]);
+
                     break;
 
                 // Add entry on batch
