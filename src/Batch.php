@@ -12,18 +12,27 @@ class Batch extends AchObject
     public const CREDIT_CODES = ['22', '23', '24', '32', '33', '34'];
     public const DEBIT_CODES = ['27', '28', '29', '37', '38', '39'];
 
+    /**
+     * @var array
+     */
     protected array $entries = [];
 
+    /**
+     * @var array
+     */
     protected array $header = [];
 
+    /**
+     * @var array
+     */
     protected array $control = [];
 
-    protected array $highLevelHeaderOverrides = [
-        'serviceClassCode', 'companyDiscretionaryData', 'companyIdentification', 'standardEntryClassCode',
-    ];
-
-    protected array $highLevelControlOverrides = [
-        'addendaCount', 'entryHash', 'totalDebit', 'totalCredit',
+    /**
+     * @var array|string[]
+     */
+    protected array $overrides = [
+        'header' => ['serviceClassCode', 'companyDiscretionaryData', 'companyIdentification', 'standardEntryClassCode'],
+        'control' => ['addendaCount', 'entryHash', 'totalDebit', 'totalCredit'],
     ];
 
     /**
@@ -167,19 +176,6 @@ class Batch extends AchObject
     }
 
     /**
-     * Boot the batch.
-     *
-     * @return mixed|void
-     */
-    protected function boot()
-    {
-        $this->setHeader();
-        $this->setControl();
-        $this->setOverrides();
-        $this->setValues();
-    }
-
-    /**
      * Set batch header.
      */
     protected function setHeader()
@@ -223,24 +219,6 @@ class Batch extends AchObject
 
                 $this->setHeaderValue($key, $value);
                 $this->setControlValue($key, $value);
-            }
-        }
-    }
-
-    /**
-     * Set batch overrides.
-     */
-    protected function setOverrides()
-    {
-        foreach ($this->highLevelHeaderOverrides as $key) {
-            if (array_key_exists($key, $this->options)) {
-                $this->setHeaderValue($key, $this->options[$key]);
-            }
-        }
-
-        foreach ($this->highLevelControlOverrides as $key) {
-            if (array_key_exists($key, $this->options)) {
-                $this->setControlValue($key, $this->options[$key]);
             }
         }
     }

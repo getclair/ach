@@ -28,12 +28,12 @@ class File extends AchObject
      * @var int
      */
     protected int $batchSequenceNumber = 0;
-
     /**
      * @var array|string[]
      */
-    protected array $highLevelOverrides = [
-        'immediateDestination', 'immediateOrigin', 'fileCreationDate', 'fileCreationTime', 'fileIdModifier', 'immediateDestinationName', 'immediateOriginName', 'referenceCode',
+    protected array $overrides = [
+        'header' => ['immediateDestination', 'immediateOrigin', 'fileCreationDate', 'fileCreationTime', 'fileIdModifier', 'immediateDestinationName', 'immediateOriginName', 'referenceCode'],
+        'control' => ['immediateDestination', 'immediateOrigin', 'fileCreationDate', 'fileCreationTime', 'fileIdModifier', 'immediateDestinationName', 'immediateOriginName', 'referenceCode'],
     ];
 
     /**
@@ -197,16 +197,13 @@ class File extends AchObject
     }
 
     /**
-     * Boot the file object.
+     * Return file options.
      *
-     * @return mixed|void
+     * @return array
      */
-    protected function boot()
+    public function getOptions(): array
     {
-        $this->setHeader();
-        $this->setControl();
-        $this->setOverrides();
-        $this->setValues();
+        return $this->options;
     }
 
     /**
@@ -216,8 +213,8 @@ class File extends AchObject
     {
         $this->header = array_merge(Arr::get($this->options, 'header', []), FileDefinition::$header);
 
-        $this->header['fileCreationDate']['value'] = Utils::formatDate();
-        $this->header['fileCreationTime']['value'] = Utils::formatTime();
+        $this->setHeaderValue('fileCreationDate', Utils::formatDate());
+        $this->setHeaderValue('fileCreationTime', Utils::formatTime());
     }
 
     /**
@@ -235,7 +232,7 @@ class File extends AchObject
     {
         // This is done to make sure we have a 9-digit routing number
         if (array_key_exists('immediateDestination', $this->options)) {
-            $this->header['immediateDestination'] = Utils::computeCheckDigit($this->options['immediateDestination']);
+            $this->setHeaderValue('immediateDestination', Utils::addCheckDigit($this->options['immediateDestination']));
         }
 
         $this->batchSequenceNumber = (int) Arr::get($this->options, 'batchSequenceNumber', 0);

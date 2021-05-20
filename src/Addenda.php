@@ -15,8 +15,8 @@ class Addenda extends AchObject
     /**
      * @var array|string[]
      */
-    protected array $highLevelOverrides = [
-        'addendaTypeCode', 'paymentRelatedInformation', 'addendaSequenceNumber', 'entryDetailSequenceNumber',
+    protected array $overrides = [
+        'fields' => ['addendaTypeCode', 'paymentRelatedInformation', 'addendaSequenceNumber', 'entryDetailSequenceNumber'],
     ];
 
     /**
@@ -50,17 +50,6 @@ class Addenda extends AchObject
         $validator->validateDataTypes($this->fields);
 
         return true;
-    }
-
-    /**
-     * Boot the addendum by setting configuration and values.
-     */
-    protected function boot()
-    {
-        $this->setFields();
-        $this->setOverrides();
-        $this->setValues();
-        $this->validate();
     }
 
     /**

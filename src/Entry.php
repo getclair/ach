@@ -21,8 +21,8 @@ class Entry extends AchObject
     /**
      * @var array|string[]
      */
-    protected array $highLevelOverrides = [
-        'transactionCode', 'receivingDFI', 'checkDigit', 'DFIAccount', 'amount', 'idNumber', 'individualName', 'discretionaryData', 'addendaId', 'traceNumber',
+    protected array $overrides = [
+        'fields' => ['transactionCode', 'receivingDFI', 'checkDigit', 'DFIAccount', 'amount', 'idNumber', 'individualName', 'discretionaryData', 'addendaId', 'traceNumber'],
     ];
 
     /**
@@ -108,17 +108,6 @@ class Entry extends AchObject
         $validator->validateDataTypes($this->fields);
 
         return true;
-    }
-
-    /**
-     * Boot the entry by setting configuration and values.
-     */
-    protected function boot()
-    {
-        $this->setFields();
-        $this->setOverrides();
-        $this->setValues();
-        $this->validate();
     }
 
     /**
