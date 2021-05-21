@@ -48,7 +48,7 @@ class Addenda extends AbstractDefinition
             'width' => 7,
             'position' => 5,
             'required' => false,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'blank' => true,
             'value' => '',
         ],

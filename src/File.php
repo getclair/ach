@@ -3,7 +3,6 @@
 namespace Clair\Ach;
 
 use Clair\Ach\Definitions\File as FileDefinition;
-use Clair\Ach\Support\HandlesValues;
 use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
 use Spatie\Async\Pool;
@@ -230,8 +229,14 @@ class File extends AchObject
      */
     protected function setValues()
     {
+        foreach ($this->header as $key => $attributes) {
+            if (array_key_exists($key, $this->options)) {
+                $this->setHeaderValue($key, $this->options[$key]);
+            }
+        }
+
         // This is done to make sure we have a 9-digit routing number
-        if (array_key_exists('immediateDestination', $this->options) && strlen(trim($this->options['immediateDestination'])) !== 9) {
+        if (array_key_exists('immediateDestination', $this->options) && strlen($this->options['immediateDestination']) === 8) {
             $this->setHeaderValue('immediateDestination', Utils::addCheckDigit($this->options['immediateDestination']));
         }
 

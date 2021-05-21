@@ -48,7 +48,7 @@ class Batch extends AbstractDefinition
             'width' => 10,
             'position' => 5,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 
@@ -93,7 +93,7 @@ class Batch extends AbstractDefinition
             'width' => 3,
             'position' => 10,
             'required' => false,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'blank' => true,
             'value' => '',
         ],

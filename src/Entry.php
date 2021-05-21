@@ -84,9 +84,13 @@ class Entry extends AchObject
      */
     public function generateString(): string
     {
-        $addendas = array_map(fn ($addenda) => Utils::generateString($addenda->fields), $this->addendas);
+        $results = [Utils::generateString($this->fields)];
 
-        return Utils::generateString($this->fields).implode(Utils::NEWLINE, $addendas);
+        foreach ($this->addendas as $addenda) {
+            $results[] = $addenda->generateString();
+        }
+
+        return implode(Utils::NEWLINE, $results);
     }
 
     /**

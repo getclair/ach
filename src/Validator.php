@@ -56,7 +56,7 @@ class Validator
         foreach ($fields as $field) {
             if (strlen($field['value']) > $field['width']) {
                 $length = strlen($field['value']);
-                throw new AchValidationException("Invalid length: {$field['name']}'s length is {$length} but should be no greater than {$field['width']}");
+                throw new AchValidationException("Invalid length: {$field['name']}'s length is {$length} but should be no greater than {$field['width']}: {$field['value']}");
             }
         }
 

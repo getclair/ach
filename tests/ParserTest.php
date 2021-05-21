@@ -3,19 +3,26 @@
 namespace Clair\Ach\Tests;
 
 use Clair\Ach\Parser;
+use Illuminate\Support\Facades\File;
 
 class ParserTest extends TestCase
 {
     public function test_generate_ach_file()
     {
-        $contents = file_get_contents(__DIR__.'/testdata/sample.ach');
+        foreach (File::files(__DIR__.'/testdata') as $file) {
+            if (! $file->isFile()) {
+                continue;
+            }
 
-        $parser = new Parser($contents);
+            $contents = file_get_contents($file->getRealPath());
 
-        $file = $parser->parse();
+            $parser = new Parser($contents);
 
-        $output = $file->generateFile();
+            $file = $parser->parse();
 
-        $this->assertEquals($output, $contents);
+            $output = $file->generateFile();
+
+            $this->assertEquals($output, $contents);
+        }
     }
 }

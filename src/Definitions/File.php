@@ -39,7 +39,7 @@ class File extends AbstractDefinition
             'width' => 10,
             'position' => 4,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'paddingChar' => ' ',
             'value' => 0,
         ],

@@ -67,7 +67,7 @@ class Utils
         $numbers = array_map(fn ($digit) => (int) $digit, str_split($aba_number));
 
         if (count($numbers) !== 8) {
-            return 0;
+            return $aba_number;
         }
 
         $total = (

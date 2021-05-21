@@ -99,10 +99,11 @@ class Batch extends AchObject
 
             if (in_array($entry->getFieldValue('transactionCode'), self::CREDIT_CODES)) {
                 $totalCredit += $entry->getFieldValue('amount');
-                break;
-            } elseif (in_array($entry->getFieldValue('transactionCode'), self::DEBIT_CODES)) {
+                continue;
+            }
+
+            if (in_array($entry->getFieldValue('transactionCode'), self::DEBIT_CODES)) {
                 $totalDebit += $entry->getFieldValue('amount');
-                break;
             }
         }
 
@@ -202,7 +203,7 @@ class Batch extends AchObject
         }
 
         // Set explicit values
-        foreach (['serviceClassCode', 'companyIdentification', 'originatingDFI', 'effectiveEntryDate', 'settlementDate'] as $key) {
+        foreach (['serviceClassCode', 'companyIdentification', 'originatorStatusCode', 'originatingDFI', 'effectiveEntryDate', 'settlementDate'] as $key) {
             if (array_key_exists($key, $this->options)) {
                 $value = $this->options[$key];
 

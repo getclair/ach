@@ -3,6 +3,7 @@
 namespace Clair\Ach;
 
 use Clair\Ach\Definitions\Addenda as AddendaDefinition;
+use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
 
 class Addenda extends AchObject
@@ -46,10 +47,21 @@ class Addenda extends AchObject
         $validator = new Validator();
 
         $validator->validateRequiredFields($this->fields);
+        $validator->validateAddendaTypeCode($this->getFieldValue('addendaTypeCode'));
         $validator->validateLengths($this->fields);
         $validator->validateDataTypes($this->fields);
 
         return true;
+    }
+
+    /**
+     * Generate addenda as string.
+     *
+     * @return string
+     */
+    public function generateString(): string
+    {
+        return Utils::generateString($this->fields);
     }
 
     /**
@@ -73,10 +85,14 @@ class Addenda extends AchObject
         }
 
         // Set explicit values
-        foreach (['addendaSequenceNumber', 'entryDetailSequenceNumber'] as $key) {
+        foreach (['addendaSequenceNumber'] as $key) {
             if (array_key_exists($key, $this->options)) {
                 $this->setFieldValue($key, $this->options[$key]);
             }
+        }
+
+        if (array_key_exists('entryDetailSequenceNumber', $this->options)) {
+            $this->setFieldValue('entryDetailSequenceNumber', substr($this->options['entryDetailSequenceNumber'], 0 - $this->fields['entryDetailSequenceNumber']['width']));
         }
     }
 
