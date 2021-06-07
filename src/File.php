@@ -35,15 +35,15 @@ class File extends AchObject
      */
     protected array $overrides = [
         'header' => ['immediateDestination', 'immediateOrigin', 'fileCreationDate', 'fileCreationTime', 'fileIdModifier', 'immediateDestinationName', 'immediateOriginName', 'referenceCode'],
-        'control' => ['immediateDestination', 'immediateOrigin', 'fileCreationDate', 'fileCreationTime', 'fileIdModifier', 'immediateDestinationName', 'immediateOriginName', 'referenceCode'],
     ];
 
     /**
      * File constructor.
-     * @param array $options
-     * @param false $autoValidate
+     * @param FileOptions $options
+     * @param bool $autoValidate
+     * @throws Exceptions\AchValidationException
      */
-    public function __construct(FileOptions $options, $autoValidate = true)
+    public function __construct(FileOptions $options, bool $autoValidate = true)
     {
         $this->options = $options->header;
 
@@ -79,10 +79,10 @@ class File extends AchObject
      */
     public function addBatch(Batch $batch)
     {
-        $this->batchSequenceNumber++;
-
         $batch->setHeaderValue('batchNumber', $this->batchSequenceNumber);
         $batch->setControlValue('batchNumber', $this->batchSequenceNumber);
+
+        $this->batchSequenceNumber++;
 
         $this->batches[] = $batch;
     }
@@ -123,7 +123,7 @@ class File extends AchObject
         $rows = 2;
         $batchCount = 0;
 
-        $entryHash = 0;
+        $entryHash = [];
         $addendaCount = 0;
 
         $totalDebit = 0;
@@ -139,7 +139,7 @@ class File extends AchObject
 
                 $entry->setFieldValue('traceNumber', $traceNumber);
 
-                $entryHash += (int) $entry->getFieldValue('receivingDFI');
+                $entryHash[] = (int) $entry->getFieldValue('receivingDFI');
 
                 $addendaCount++;
                 $rows++;
@@ -159,7 +159,7 @@ class File extends AchObject
         $this->setControlValue('totalCredit', $totalCredit);
         $this->setControlValue('addendaCount', $addendaCount);
         $this->setControlValue('blockCount', Utils::getNextMultiple($rows, 10) / 10);
-        $this->setControlValue('entryHash', substr($entryHash, -10));
+        $this->setControlValue('entryHash', array_sum(array_slice($entryHash, 0, 10)));
 
         return [implode(Utils::NEWLINE, $results), $rows];
     }

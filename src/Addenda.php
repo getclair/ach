@@ -24,8 +24,9 @@ class Addenda extends AchObject
      * Addenda constructor.
      * @param array $options
      * @param false $autoValidate
+     * @throws Exceptions\AchValidationException
      */
-    public function __construct(array $options, $autoValidate = true)
+    public function __construct(array $options, bool $autoValidate = true)
     {
         $this->options = $options;
 

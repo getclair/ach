@@ -16,7 +16,7 @@ class Utils
      * Return a string at the appropriate length.
      *
      * @param $string
-     * @param $object
+     * @param array $object
      * @return array
      */
     public static function parseLine($string, array $object): array
@@ -59,9 +59,9 @@ class Utils
      * Compute check digit.
      *
      * @param $aba_number
-     * @return int|null
+     * @return int
      */
-    public static function computeCheckDigit($aba_number)
+    public static function computeCheckDigit($aba_number): int
     {
         $aba_number = substr($aba_number, 0, 8);
         $numbers = array_map(fn ($digit) => (int) $digit, str_split($aba_number));
@@ -76,7 +76,7 @@ class Utils
             9 * ($numbers[2] + $numbers[5])
         );
 
-        return $total % 10;
+        return (int) $total % 10;
     }
 
     /**

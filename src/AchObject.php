@@ -41,7 +41,6 @@ abstract class AchObject
 
     /**
      * Set any overrides.
-     * @param array $groups
      */
     protected function setOverrides()
     {

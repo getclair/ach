@@ -44,7 +44,8 @@ class FileOptions implements Arrayable
     }
 
     /**
-     * @param mixed $batch
+     * @param $index
+     * @param array $values
      */
     public function updateBatch($index, array $values): void
     {

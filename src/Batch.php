@@ -90,12 +90,12 @@ class Batch extends AchObject
 
         $this->entries[] = $entry;
 
-        $entryHash = 0;
+        $entryHash = [];
         $totalDebit = 0;
         $totalCredit = 0;
 
         foreach ($this->entries as $entry) {
-            $entryHash += (int) $entry->getFieldValue('receivingDFI');
+            $entryHash[] = (int) $entry->getFieldValue('receivingDFI');
 
             if (in_array($entry->getFieldValue('transactionCode'), self::CREDIT_CODES)) {
                 $totalCredit += $entry->getFieldValue('amount');
@@ -104,6 +104,7 @@ class Batch extends AchObject
 
             if (in_array($entry->getFieldValue('transactionCode'), self::DEBIT_CODES)) {
                 $totalDebit += $entry->getFieldValue('amount');
+                continue;
             }
         }
 
@@ -111,7 +112,7 @@ class Batch extends AchObject
         $this->setControlValue('totalDebit', $totalDebit);
 
         // Add up the positions 4-11 and compute the total. Slice the 10 rightmost digits.
-        $this->setControlValue('entryHash', substr($entryHash, -10));
+        $this->setControlValue('entryHash', array_sum(array_slice($entryHash, 0, 10)));
     }
 
     /**
