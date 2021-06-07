@@ -122,8 +122,7 @@ class File extends AchObject
     public function generateBatches(): array
     {
         $results = [];
-        $rows = 3;
-        $batchCount = 0;
+        $rows = 2;
 
         $entryHash = [];
         $entryAndAddendaCount = 0;
@@ -143,21 +142,18 @@ class File extends AchObject
 
                 $entryHash[] = (int) $entry->getFieldValue('receivingDFI');
 
-                $entryAndAddendaCount += $batch->getControlValue('addendaCount');
-
+                $entryAndAddendaCount++;
                 $rows++;
             }
 
             if (count($batch->getEntries()) > 0) {
-                $batchCount++;
-
+                $this->setControlValue('batchCount', (int) $this->getControlValue('batchCount') + 1);
                 $rows = $rows + 2;
 
                 $results[] = $batch->generateString();
             }
         }
 
-        $this->setControlValue('batchCount', $batchCount);
         $this->setControlValue('totalDebit', $totalDebit);
         $this->setControlValue('totalCredit', $totalCredit);
         $this->setControlValue('addendaCount', $entryAndAddendaCount);

@@ -86,7 +86,9 @@ class Batch extends AchObject
      */
     public function addEntry(Entry $entry)
     {
-        $this->control['addendaCount']['value'] += $entry->getRecordCount();
+        $count = $this->getControlValue('addendaCount') + $entry->getRecordCount();
+
+        $this->setControlValue('addendaCount', $count);
 
         $this->entries[] = $entry;
 
