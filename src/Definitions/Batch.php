@@ -188,7 +188,7 @@ class Batch extends AbstractDefinition
             'width' => 10,
             'position' => 7,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '',
         ],
 

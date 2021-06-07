@@ -15,7 +15,7 @@ trait HandlesValues
      */
     public function getValue($group, $key)
     {
-        if (isset($this->$group) && array_key_exists($key, $this->$group)) {
+        if (isset($this->$group) && array_key_exists($key, $this->$group) && array_key_exists('value', $this->$group[$key])) {
             return $this->$group[$key]['value'];
         }
     }

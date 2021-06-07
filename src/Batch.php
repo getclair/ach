@@ -4,7 +4,6 @@ namespace Clair\Ach;
 
 use Clair\Ach\Definitions\Batch as BatchDefinition;
 use Clair\Ach\Support\Utils;
-use Closure;
 use Illuminate\Support\Arr;
 
 class Batch extends AchObject
@@ -39,8 +38,9 @@ class Batch extends AchObject
      * File constructor.
      * @param array $options
      * @param false $autoValidate
+     * @throws Exceptions\AchValidationException
      */
-    public function __construct(array $options, $autoValidate = true)
+    public function __construct(array $options, bool $autoValidate = true)
     {
         $this->options = $options;
 
@@ -97,14 +97,14 @@ class Batch extends AchObject
         foreach ($this->entries as $entry) {
             $entryHash[] = (int) $entry->getFieldValue('receivingDFI');
 
-            if (in_array($entry->getFieldValue('transactionCode'), self::CREDIT_CODES)) {
-                $totalCredit += $entry->getFieldValue('amount');
-                continue;
+            $transactionCode = (string) $entry->getFieldValue('transactionCode');
+
+            if (in_array($transactionCode, self::CREDIT_CODES)) {
+                $totalCredit += (int) $entry->getFieldValue('amount');
             }
 
-            if (in_array($entry->getFieldValue('transactionCode'), self::DEBIT_CODES)) {
-                $totalDebit += $entry->getFieldValue('amount');
-                continue;
+            if (in_array($transactionCode, self::DEBIT_CODES)) {
+                $totalDebit += (int) $entry->getFieldValue('amount');
             }
         }
 
@@ -128,9 +128,9 @@ class Batch extends AchObject
     /**
      * Generate header as a string.
      *
-     * @param Closure $callback
+     * @return string
      */
-    public function generateHeader()
+    public function generateHeader(): string
     {
         return Utils::generateString($this->header);
     }
@@ -138,9 +138,9 @@ class Batch extends AchObject
     /**
      * Generate control as a string.
      *
-     * @param Closure $callback
+     * @return string
      */
-    public function generateControl()
+    public function generateControl(): string
     {
         return Utils::generateString($this->control);
     }
@@ -148,9 +148,9 @@ class Batch extends AchObject
     /**
      * Generate entries as a string.
      *
-     * @param Closure $callback
+     * @return string
      */
-    public function generateEntries()
+    public function generateEntries(): string
     {
         $results = [];
 
@@ -218,7 +218,7 @@ class Batch extends AchObject
                 }
 
                 $this->setHeaderValue($key, $value);
-                $this->setControlValue($key, $value);
+                $this->setControlValue($key, $this->getHeaderValue($key));
             }
         }
     }

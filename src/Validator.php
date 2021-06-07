@@ -34,7 +34,7 @@ class Validator
         $fields = array_filter($fields, fn ($field) => array_key_exists('required', $field) && $field['required'] === true);
 
         foreach ($fields as $field) {
-            if ($field['value'] === null || strlen($field['value']) === 0) {
+            if (! array_key_exists('value', $field) || $field['value'] === null || strlen($field['value']) === 0) {
                 throw new AchValidationException('Missing required field: '.$field['name']);
             }
         }

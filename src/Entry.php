@@ -51,8 +51,11 @@ class Entry extends AchObject
         // Set addendaId to 1 if there's any addenda
         $this->setFieldValue('addendaId', '1');
 
-        $addenda->setFieldValue('addendaSequenceNumber', $this->getRecordCount());
         $addenda->setFieldValue('entryDetailSequenceNumber', $this->getFieldValue('traceNumber'));
+
+        if (! $addenda->getFieldValue('addendaSequenceNumber')) {
+            $addenda->setFieldValue('addendaSequenceNumber', $this->getRecordCount());
+        }
 
         $this->addendas[] = $addenda;
     }
@@ -74,7 +77,7 @@ class Entry extends AchObject
      */
     public function getRecordCount(): int
     {
-        return count($this->addendas) + 1;
+        return count($this->getAddendas()) + 1;
     }
 
     /**
@@ -103,7 +106,7 @@ class Entry extends AchObject
     {
         $validator = new Validator();
 
-        if ($this->getFieldValue('addendaId') === '0') {
+        if ($this->getFieldValue('addendaId') === '1') {
             $validator->validateAddendaTransactionCode($this->fields['transactionCode']['value']);
         }
 

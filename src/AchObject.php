@@ -23,16 +23,16 @@ abstract class AchObject
      */
     protected function boot()
     {
-        if (method_exists(static::class, 'setFields')) {
-            $this->setFields();
-        }
-
         if (method_exists(static::class, 'setHeader')) {
             $this->setHeader();
         }
 
         if (method_exists(static::class, 'setControl')) {
             $this->setControl();
+        }
+
+        if (method_exists(static::class, 'setFields')) {
+            $this->setFields();
         }
 
         $this->setOverrides();

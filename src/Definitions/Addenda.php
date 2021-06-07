@@ -38,13 +38,13 @@ class Addenda extends AbstractDefinition
             'width' => 4,
             'position' => 4,
             'required' => true,
-            'type' => FieldTypes::TYPE_NUMERIC,
+            'type' => FieldTypes::TYPE_ALPHANUMERIC,
             'value' => '1',
             'number' => true,
         ],
 
         'entryDetailSequenceNumber' => [
-            'name' => 'Entry Detail Sequnce Number',
+            'name' => 'Entry Detail Sequence Number',
             'width' => 7,
             'position' => 5,
             'required' => false,

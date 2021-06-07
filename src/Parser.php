@@ -46,7 +46,7 @@ class Parser
 
         $fileOptions = $this->prepareOptions();
 
-        $file = new File($fileOptions);
+        $file = new File($fileOptions->header);
 
         foreach ($fileOptions->batches as $batchData) {
             $batch = new Batch($batchData['header']);
@@ -75,6 +75,7 @@ class Parser
      * Define options for NACHA file.
      *
      * @return FileOptions
+     * @throws Exceptions\AchValidationException
      */
     protected function prepareOptions(): FileOptions
     {
@@ -96,21 +97,18 @@ class Parser
 
                 // Setup batch
                 case 5:
-                    if (! array_key_exists($batchIndex, $fileOptions->batches)) {
-                        $fileOptions->batches[$batchIndex] = [];
-                    }
-
                     $fileOptions->updateBatch($batchIndex, [
                         'header' => Utils::parseLine($line, BatchDefinition::$header),
+                        'entry' => [],
                     ]);
 
                     break;
 
                 // Update control on batch and move to the next one.
                 case 8:
-                    $batch = $fileOptions->batches[$batchIndex];
-                    $batch['control'] = Utils::parseLine($line, BatchDefinition::$control);
-                    $fileOptions->updateBatch($batchIndex, $batch);
+                    $fileOptions->updateBatch($batchIndex, [
+                        'control' => Utils::parseLine($line, BatchDefinition::$control),
+                    ]);
 
                     $batchIndex++;
                     break;
@@ -129,6 +127,9 @@ class Parser
                     $batch['entry'][$index]->addAddenda(new Addenda(Utils::parseLine($line, AddendaDefinition::$fields)));
                     $fileOptions->updateBatch($batchIndex, $batch);
 
+                    break;
+
+                default:
                     break;
             }
         }

@@ -49,6 +49,10 @@ class FileOptions implements Arrayable
      */
     public function updateBatch($index, array $values): void
     {
+        if (! array_key_exists($index, $this->batches)) {
+            $this->batches[$index] = [];
+        }
+
         $this->batches[$index] = array_merge($this->batches[$index], $values);
     }
 

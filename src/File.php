@@ -5,7 +5,6 @@ namespace Clair\Ach;
 use Clair\Ach\Definitions\File as FileDefinition;
 use Clair\Ach\Support\Utils;
 use Illuminate\Support\Arr;
-use Spatie\Async\Pool;
 
 class File extends AchObject
 {
@@ -30,6 +29,7 @@ class File extends AchObject
      * @var int
      */
     protected int $batchSequenceNumber = 0;
+
     /**
      * @var array|string[]
      */
@@ -39,13 +39,13 @@ class File extends AchObject
 
     /**
      * File constructor.
-     * @param FileOptions $options
+     * @param array $options
      * @param bool $autoValidate
      * @throws Exceptions\AchValidationException
      */
-    public function __construct(FileOptions $options, bool $autoValidate = true)
+    public function __construct(array $options, bool $autoValidate = true)
     {
-        $this->options = $options->header;
+        $this->options = $options;
 
         $this->boot();
 
@@ -79,10 +79,10 @@ class File extends AchObject
      */
     public function addBatch(Batch $batch)
     {
+        $this->batchSequenceNumber++;
+
         $batch->setHeaderValue('batchNumber', $this->batchSequenceNumber);
         $batch->setControlValue('batchNumber', $this->batchSequenceNumber);
-
-        $this->batchSequenceNumber++;
 
         $this->batches[] = $batch;
     }
@@ -98,6 +98,8 @@ class File extends AchObject
     }
 
     /**
+     * Generate padded rows for bottom of file.
+     *
      * @param $rows
      * @return string
      */
@@ -120,11 +122,11 @@ class File extends AchObject
     public function generateBatches(): array
     {
         $results = [];
-        $rows = 2;
+        $rows = 3;
         $batchCount = 0;
 
         $entryHash = [];
-        $addendaCount = 0;
+        $entryAndAddendaCount = 0;
 
         $totalDebit = 0;
         $totalCredit = 0;
@@ -135,13 +137,14 @@ class File extends AchObject
 
             foreach ($batch->getEntries() as $entry) {
                 $traceNumber = $entry->getFieldValue('traceNumber')
-                    ?: substr($this->getHeaderValue('immediateOrigin'), 0, 8).str_pad($addendaCount, 7, '0', STR_PAD_LEFT);
+                    ?: substr($this->getHeaderValue('immediateOrigin'), 0, 8).str_pad($entryAndAddendaCount, 7, '0', STR_PAD_LEFT);
 
                 $entry->setFieldValue('traceNumber', $traceNumber);
 
                 $entryHash[] = (int) $entry->getFieldValue('receivingDFI');
 
-                $addendaCount++;
+                $entryAndAddendaCount += $batch->getControlValue('addendaCount');
+
                 $rows++;
             }
 
@@ -157,7 +160,7 @@ class File extends AchObject
         $this->setControlValue('batchCount', $batchCount);
         $this->setControlValue('totalDebit', $totalDebit);
         $this->setControlValue('totalCredit', $totalCredit);
-        $this->setControlValue('addendaCount', $addendaCount);
+        $this->setControlValue('addendaCount', $entryAndAddendaCount);
         $this->setControlValue('blockCount', Utils::getNextMultiple($rows, 10) / 10);
         $this->setControlValue('entryHash', array_sum(array_slice($entryHash, 0, 10)));
 
