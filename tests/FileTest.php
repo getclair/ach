@@ -5,7 +5,7 @@ namespace Clair\Ach\Tests;
 use Clair\Ach\Parser;
 use Illuminate\Support\Facades\File;
 
-class ParserTest extends TestCase
+class FileTest extends TestCase
 {
     public function test_generate_ach_file()
     {
@@ -24,5 +24,16 @@ class ParserTest extends TestCase
 
             $this->assertEquals($output, $contents, $name);
         }
+    }
+
+    public function test_get_file_data()
+    {
+        $contents = File::get(__DIR__.'/testdata/ppd-credit.ach');
+
+        $parser = new Parser($contents);
+
+        $file = $parser->parse();
+
+        $this->assertIsArray($file->data());
     }
 }

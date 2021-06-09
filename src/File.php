@@ -4,9 +4,10 @@ namespace Clair\Ach;
 
 use Clair\Ach\Definitions\File as FileDefinition;
 use Clair\Ach\Support\Utils;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 
-class File extends AchObject
+class File extends AchObject implements Arrayable
 {
     public const LINE_WIDTH = 94;
 
@@ -195,6 +196,20 @@ class File extends AchObject
     }
 
     /**
+     * Return parsed data.
+     *
+     * @return array
+     */
+    public function data(): array
+    {
+        return [
+            'header' => $this->header,
+            'batches' => $this->batches,
+            'control' => $this->control,
+        ];
+    }
+
+    /**
      * Return file options.
      *
      * @return array
@@ -240,5 +255,13 @@ class File extends AchObject
         }
 
         $this->batchSequenceNumber = (int) Arr::get($this->options, 'batchSequenceNumber', 0);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->data();
     }
 }

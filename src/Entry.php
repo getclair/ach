@@ -42,6 +42,16 @@ class Entry extends AchObject
     }
 
     /**
+     * Return fields.
+     *
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    /**
      * Add a new Entry Addenda.
      *
      * @param Addenda $addenda
