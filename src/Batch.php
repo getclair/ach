@@ -178,6 +178,16 @@ class Batch extends AchObject
     }
 
     /**
+     * Get batch header.
+     *
+     * @return array
+     */
+    public function getHeader(): array
+    {
+        return $this->header;
+    }
+
+    /**
      * Set batch header.
      */
     protected function setHeader()
