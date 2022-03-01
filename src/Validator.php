@@ -83,6 +83,7 @@ class Validator
                     $this->testRegex(self::$alphaRegex, $field);
                     break;
                 case FieldTypes::TYPE_ALPHANUMERIC:
+                    $field = str_replace("\\", "", $field);
                     $this->testRegex(self::$alphanumericRegex, $field);
                     break;
             }
@@ -186,7 +187,7 @@ class Validator
         }
 
         if (! preg_match($regex, $subject)) {
-            throw new AchValidationException("Invalid data type: {$field['name']} is not a an expected {$field['type']}: {$field['value']}");
+            throw new AchValidationException("Invalid data type: {$field['name']} is not a an expected {$field['type']}: {$subject}");
         }
 
         return true;
