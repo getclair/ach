@@ -37,7 +37,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesRequiredData()
+    public static function providesRequiredData(): array
     {
         return [
             'present' => ['valid', true],
@@ -76,7 +76,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesLengthData()
+    public static function providesLengthData(): array
     {
         return [
             'valid' => [6, 'string', true],
@@ -116,7 +116,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesDataTypesData()
+    public static function providesDataTypesData(): array
     {
         return [
             'valid alpha' => [FieldTypes::TYPE_ALPHA, 'string', true],
@@ -147,7 +147,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesAddendaTypeCodeData()
+    public static function providesAddendaTypeCodeData(): array
     {
         return [
             'valid code, string' => ['99', true],
@@ -177,7 +177,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesAddendaTransactionCodeData()
+    public static function providesAddendaTransactionCodeData(): array
     {
         return [
             'valid code, string' => ['22', true],
@@ -206,7 +206,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesServiceTypeCodeData()
+    public static function providesServiceTypeCodeData(): array
     {
         return [
             'valid code, string' => ['200', true],
@@ -242,7 +242,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function providesRoutingNumberData()
+    public static function providesRoutingNumberData(): array
     {
         return [
             'valid routing number, string' => ['021000021', true, true],
